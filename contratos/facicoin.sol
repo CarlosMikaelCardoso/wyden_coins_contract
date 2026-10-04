@@ -61,4 +61,36 @@ contract MeuToken {
         emit Transfer(msg.sender, to, value);
         return true;
     }
+
+    // -----------------------------
+    // Aprovação (permitir que outro gaste seus tokens)
+    // -----------------------------
+    function approve(address spender, uint256 value) public returns (bool) {
+        allowed[msg.sender][spender] = value;
+        emit Approval(msg.sender, spender, value);
+        return true;
+    }
+
+    // -----------------------------
+    // Ver limite aprovado
+    // -----------------------------
+    function allowance(address owner, address spender) public view returns (uint256) {
+        return allowed[owner][spender];
+    }
+
+    // -----------------------------
+    // Transferência delegada (spender transfere em nome do owner)
+    // -----------------------------
+    function transferFrom(address from, address to, uint256 value) public returns (bool) {
+        require(to != address(0), "Endereco invalido");
+        require(balances[from] >= value, "Saldo insuficiente");
+        require(allowed[from][msg.sender] >= value, "Limite de aprovacao insuficiente");
+
+        balances[from] -= value;
+        allowed[from][msg.sender] -= value;
+        balances[to] += value;
+
+        emit Transfer(from, to, value);
+        return true;
+    }
 }
