@@ -17,5 +17,5 @@ test:
         opts:
           tps: 50
       workload:
-        module: benchmarks/caliper_besu/facicoin_write1.js
+        module: caliper_besu/facicoin_write1.js
         arguments: *simple-args
