@@ -28,6 +28,7 @@ cleanup() {
     if [[ -f "${BASE_DIR}/docker-compose.yaml" ]]; then
         docker compose -f "${BASE_DIR}/docker-compose.yaml" down --volumes --remove-orphans || true
     fi
+    docker rm -f node1 node2 node3 node4 node5 node6 rpcnode 2>/dev/null || true
     docker run --rm -v "${BASE_DIR}:/data" alpine sh -c "rm -rf /data/besu-* /data/${JAVA_VERSION} /data/networkFiles /data/Permissioned-Network /data/genesis.json"
     echo "Limpeza concluída."
 }
