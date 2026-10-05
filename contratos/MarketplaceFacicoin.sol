@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-// Interface mínima do ERC20 (FaciCoin)
-interface ERC20 {
+// Interface mínima do IERC20 (FaciCoin)
+interface IERC20 {
     function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
     function transfer(address recipient, uint256 amount) external returns (bool);
     function balanceOf(address account) external view returns (uint256);
 }
 
 contract MarketplaceFacicoin {
-    ERC20 public facicoin;
+    IERC20 public facicoin;
     address public admin;
 
     // Estrutura para Mentorias (Professores e Egressos)
@@ -48,7 +48,7 @@ contract MarketplaceFacicoin {
     }
 
     constructor(address _facicoinAddress) {
-        facicoin = ERC20(_facicoinAddress);
+        facicoin = IERC20(_facicoinAddress);
         admin = msg.sender;
     }
 
