@@ -16,6 +16,10 @@ async function main() {
     // Ler artefatos do MarketplaceFacicoin
     const marketAbi = JSON.parse(fs.readFileSync(path.join(buildPath, 'MarketplaceFacicoin.abi'), 'utf8'));
     const marketBytecode = fs.readFileSync(path.join(buildPath, 'MarketplaceFacicoin.bin'), 'utf8');
+
+    // Ler artefatos do ReciclagemFacicoin
+    const reciclagemAbi = JSON.parse(fs.readFileSync(path.join(buildPath, 'ReciclagemFacicoin.abi'), 'utf8'));
+    const reciclagemBytecode = fs.readFileSync(path.join(buildPath, 'ReciclagemFacicoin.bin'), 'utf8');
     
     const provider = new ethers.JsonRpcProvider(rpcUrl);
     const wallet = new ethers.Wallet(privateKey, provider);
@@ -40,9 +44,25 @@ async function main() {
 
     const marketAddress = await marketContract.getAddress();
     console.log("MarketplaceFacicoin deployado em:", marketAddress);
+
+    console.log("-----------------------------------------");
+    console.log("Fazendo deploy do ReciclagemFacicoin...");
+    const reciclagemFactory = new ethers.ContractFactory(reciclagemAbi, reciclagemBytecode, wallet);
+    const reciclagemContract = await reciclagemFactory.deploy(tokenAddress);
+    await reciclagemContract.waitForDeployment();
+
+    const reciclagemAddress = await reciclagemContract.getAddress();
+    console.log("ReciclagemFacicoin deployado em:", reciclagemAddress);
+
+    console.log("-----------------------------------------");
+    console.log("Transferindo 100.000 FaciCoins para o fundo de recompensas da Reciclagem...");
+    const rewardFunds = ethers.parseUnits("100000", 18);
+    const tx = await tokenContract.transfer(reciclagemAddress, rewardFunds);
+    await tx.wait();
+    console.log("Fundos transferidos com sucesso!");
     
     console.log("-----------------------------------------");
-    console.log("Deploy finalizado com sucesso!");
+    console.log("Deploy de todo o ecossistema finalizado com sucesso!");
 }
 
 main().catch(console.error);
