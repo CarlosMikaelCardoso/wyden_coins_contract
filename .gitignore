@@ -1,3 +1,31 @@
+# Dependências Node
 node_modules/
-.env
+**/node_modules/
+package-lock.json
+
+# Compilados Solidity
 build/
+**/build/
+artifacts/
+cache/
+
+# Ambientes Locais e Logs
+.env
+*.log
+*.jfr
+report.html
+
+# Hyperledger Besu & JDK (rede local)
+rede/besu-*/
+rede/jdk-*/
+rede/Permissioned-Network/
+rede/networkFiles/
+rede/key
+rede/genesis.json
+rede/*.tar.gz
+rede/data/
+rede/database/
+
+# Arquivos de Sistema
+.DS_Store
+Thumbs.db

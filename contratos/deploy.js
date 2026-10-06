@@ -1,68 +1,63 @@
-const { ethers } = require('ethers');
 const fs = require('fs');
-const path = require('path');
+const ethers = require('ethers');
+
+const RPC_URL = "http://127.0.0.1:8545";
+const provider = new ethers.JsonRpcProvider(RPC_URL);
+
+const PRIVATE_KEY = "0x8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
+const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
 
 async function main() {
-    const rpcUrl = process.env.BESU_RPC_URL || 'http://127.0.0.1:8545';
-    // Chave padrão usada no script de setup do Besu (EXTERNAL_DEPLOY_ACCOUNT)
-    const privateKey = process.env.BESU_DEPLOYER_PRIVATE_KEY || '8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63';
-    
-    const buildPath = path.join(__dirname, 'build');
-    
-    // Ler artefatos do FaciCoin (MeuToken)
-    const tokenAbi = JSON.parse(fs.readFileSync(path.join(buildPath, 'MeuToken.abi'), 'utf8'));
-    const tokenBytecode = fs.readFileSync(path.join(buildPath, 'MeuToken.bin'), 'utf8');
+    console.log("Iniciando o deploy da arquitetura WydenCoin...\n");
 
-    // Ler artefatos do MarketplaceFacicoin
-    const marketAbi = JSON.parse(fs.readFileSync(path.join(buildPath, 'MarketplaceFacicoin.abi'), 'utf8'));
-    const marketBytecode = fs.readFileSync(path.join(buildPath, 'MarketplaceFacicoin.bin'), 'utf8');
+    console.log("-> Fazendo deploy do WydenCoin...");
+    const wcAbi = JSON.parse(fs.readFileSync('./build/WydenCoin.abi', 'utf8'));
+    const wcBin = fs.readFileSync('./build/WydenCoin.bin', 'utf8');
+    const WCFactory = new ethers.ContractFactory(wcAbi, wcBin, wallet);
+    const wcContract = await WCFactory.deploy();
+    await wcContract.waitForDeployment();
+    const wcAddress = await wcContract.getAddress();
+    console.log(`[+] WydenCoin (WC) publicado no endereço: ${wcAddress}`);
 
-    // Ler artefatos do ReciclagemFacicoin
-    const reciclagemAbi = JSON.parse(fs.readFileSync(path.join(buildPath, 'ReciclagemFacicoin.abi'), 'utf8'));
-    const reciclagemBytecode = fs.readFileSync(path.join(buildPath, 'ReciclagemFacicoin.bin'), 'utf8');
-    
-    const provider = new ethers.JsonRpcProvider(rpcUrl);
-    const wallet = new ethers.Wallet(privateKey, provider);
-    
-    console.log("-----------------------------------------");
-    console.log("Fazendo deploy do FaciCoin (MeuToken)...");
-    const tokenFactory = new ethers.ContractFactory(tokenAbi, tokenBytecode, wallet);
-    
-    // Inicializar com 1 Milhão de moedas (18 decimais)
-    const initialSupply = ethers.parseUnits("1000000", 18);
-    const tokenContract = await tokenFactory.deploy(initialSupply);
-    await tokenContract.waitForDeployment();
-    
-    const tokenAddress = await tokenContract.getAddress();
-    console.log("FaciCoin deployado em:", tokenAddress);
+    console.log("\n-> Fazendo deploy do RedemptionManager...");
+    const rmAbi = JSON.parse(fs.readFileSync('./build/RedemptionManager.abi', 'utf8'));
+    const rmBin = fs.readFileSync('./build/RedemptionManager.bin', 'utf8');
+    const RMFactory = new ethers.ContractFactory(rmAbi, rmBin, wallet);
+    const rmContract = await RMFactory.deploy(wcAddress);
+    await rmContract.waitForDeployment();
+    const rmAddress = await rmContract.getAddress();
+    console.log(`[+] RedemptionManager publicado no endereço: ${rmAddress}`);
 
-    console.log("-----------------------------------------");
-    console.log("Fazendo deploy do MarketplaceFacicoin...");
-    const marketFactory = new ethers.ContractFactory(marketAbi, marketBytecode, wallet);
-    const marketContract = await marketFactory.deploy(tokenAddress);
-    await marketContract.waitForDeployment();
+    console.log("\n-> Configurando permissões no contrato...");
+    const tx1 = await wcContract.setRedemptionManager(rmAddress);
+    await tx1.wait();
+    console.log(`[OK] RedemptionManager autorizado no contrato WydenCoin.`);
 
-    const marketAddress = await marketContract.getAddress();
-    console.log("MarketplaceFacicoin deployado em:", marketAddress);
+    const MINTER_ROLE = await wcContract.MINTER_ROLE();
+    const tx2 = await wcContract.grantRole(MINTER_ROLE, wallet.address);
+    await tx2.wait();
+    console.log(`[OK] MINTER_ROLE concedida ao administrador.`);
 
-    console.log("-----------------------------------------");
-    console.log("Fazendo deploy do ReciclagemFacicoin...");
-    const reciclagemFactory = new ethers.ContractFactory(reciclagemAbi, reciclagemBytecode, wallet);
-    const reciclagemContract = await reciclagemFactory.deploy(tokenAddress);
-    await reciclagemContract.waitForDeployment();
+    const CONFIRMER_ROLE = await rmContract.CONFIRMER_ROLE();
+    const MANAGER_ROLE = await rmContract.MANAGER_ROLE();
+    await (await rmContract.grantRole(CONFIRMER_ROLE, wallet.address)).wait();
+    await (await rmContract.grantRole(MANAGER_ROLE, wallet.address)).wait();
+    console.log(`[OK] CONFIRMER_ROLE e MANAGER_ROLE concedidas ao administrador.`);
 
-    const reciclagemAddress = await reciclagemContract.getAddress();
-    console.log("ReciclagemFacicoin deployado em:", reciclagemAddress);
+    console.log("\n-> Dando Approve infinito no token para o RedemptionManager...");
+    await (await wcContract.approve(rmAddress, ethers.MaxUint256)).wait();
+    console.log("[OK] Approve concedido!");
 
-    console.log("-----------------------------------------");
-    console.log("Transferindo 100.000 FaciCoins para o fundo de recompensas da Reciclagem...");
-    const rewardFunds = ethers.parseUnits("100000", 18);
-    const tx = await tokenContract.transfer(reciclagemAddress, rewardFunds);
-    await tx.wait();
-    console.log("Fundos transferidos com sucesso!");
-    
-    console.log("-----------------------------------------");
-    console.log("Deploy de todo o ecossistema finalizado com sucesso!");
+    console.log("\nDeploy finalizado com sucesso!");
+    const addrs = {
+        WydenCoin: wcAddress,
+        RedemptionManager: rmAddress
+    };
+    fs.writeFileSync('addresses.json', JSON.stringify(addrs, null, 2));
+    console.log("Endereços salvos em addresses.json");
 }
 
-main().catch(console.error);
+main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+});

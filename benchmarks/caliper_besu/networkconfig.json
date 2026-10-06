@@ -9,19 +9,120 @@
     "fromAddressSeed": "0x3f841bf589fdf83a521e55d51afddc34fa65351161eead24f064855fc29c9580",
     "transactionConfirmationBlocks": 2,
     "contracts": {
-      "facicoin": {
-        "address": "0x42699A7612A82f1d9C36148af9C77354759b210b",
+      "wydenCoin": {
+        "address": "WC_ADDRESS_HERE",
         "abi": [
+          {
+            "inputs": [],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+          },
+          {
+            "inputs": [],
+            "name": "AccessControlBadConfirmation",
+            "type": "error"
+          },
           {
             "inputs": [
               {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+              },
+              {
+                "internalType": "bytes32",
+                "name": "neededRole",
+                "type": "bytes32"
+              }
+            ],
+            "name": "AccessControlUnauthorizedAccount",
+            "type": "error"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "address",
+                "name": "spender",
+                "type": "address"
+              },
+              {
                 "internalType": "uint256",
-                "name": "initialSupply",
+                "name": "allowance",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "needed",
                 "type": "uint256"
               }
             ],
-            "stateMutability": "nonpayable",
-            "type": "constructor"
+            "name": "ERC20InsufficientAllowance",
+            "type": "error"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "balance",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "needed",
+                "type": "uint256"
+              }
+            ],
+            "name": "ERC20InsufficientBalance",
+            "type": "error"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "address",
+                "name": "approver",
+                "type": "address"
+              }
+            ],
+            "name": "ERC20InvalidApprover",
+            "type": "error"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "address",
+                "name": "receiver",
+                "type": "address"
+              }
+            ],
+            "name": "ERC20InvalidReceiver",
+            "type": "error"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+              }
+            ],
+            "name": "ERC20InvalidSender",
+            "type": "error"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "address",
+                "name": "spender",
+                "type": "address"
+              }
+            ],
+            "name": "ERC20InvalidSpender",
+            "type": "error"
           },
           {
             "anonymous": false,
@@ -54,6 +155,106 @@
               {
                 "indexed": true,
                 "internalType": "address",
+                "name": "aluno",
+                "type": "address"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "valor",
+                "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "motivo",
+                "type": "bytes32"
+              }
+            ],
+            "name": "RewardMinted",
+            "type": "event"
+          },
+          {
+            "anonymous": false,
+            "inputs": [
+              {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
+              },
+              {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "previousAdminRole",
+                "type": "bytes32"
+              },
+              {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "newAdminRole",
+                "type": "bytes32"
+              }
+            ],
+            "name": "RoleAdminChanged",
+            "type": "event"
+          },
+          {
+            "anonymous": false,
+            "inputs": [
+              {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
+              },
+              {
+                "indexed": true,
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+              },
+              {
+                "indexed": true,
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+              }
+            ],
+            "name": "RoleGranted",
+            "type": "event"
+          },
+          {
+            "anonymous": false,
+            "inputs": [
+              {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
+              },
+              {
+                "indexed": true,
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+              },
+              {
+                "indexed": true,
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+              }
+            ],
+            "name": "RoleRevoked",
+            "type": "event"
+          },
+          {
+            "anonymous": false,
+            "inputs": [
+              {
+                "indexed": true,
+                "internalType": "address",
                 "name": "from",
                 "type": "address"
               },
@@ -72,6 +273,32 @@
             ],
             "name": "Transfer",
             "type": "event"
+          },
+          {
+            "inputs": [],
+            "name": "DEFAULT_ADMIN_ROLE",
+            "outputs": [
+              {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+              }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "MINTER_ROLE",
+            "outputs": [
+              {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+              }
+            ],
+            "stateMutability": "view",
+            "type": "function"
           },
           {
             "inputs": [
@@ -125,7 +352,7 @@
             "inputs": [
               {
                 "internalType": "address",
-                "name": "owner",
+                "name": "account",
                 "type": "address"
               }
             ],
@@ -141,6 +368,37 @@
             "type": "function"
           },
           {
+            "inputs": [
+              {
+                "internalType": "uint256",
+                "name": "value",
+                "type": "uint256"
+              }
+            ],
+            "name": "burn",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "value",
+                "type": "uint256"
+              }
+            ],
+            "name": "burnFrom",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
             "inputs": [],
             "name": "decimals",
             "outputs": [
@@ -150,7 +408,91 @@
                 "type": "uint8"
               }
             ],
+            "stateMutability": "pure",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
+              }
+            ],
+            "name": "getRoleAdmin",
+            "outputs": [
+              {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+              }
+            ],
             "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
+              },
+              {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+              }
+            ],
+            "name": "grantRole",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
+              },
+              {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+              }
+            ],
+            "name": "hasRole",
+            "outputs": [
+              {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+              }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "address",
+                "name": "aluno",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "valor",
+                "type": "uint256"
+              },
+              {
+                "internalType": "bytes32",
+                "name": "motivo",
+                "type": "bytes32"
+              }
+            ],
+            "name": "mintReward",
+            "outputs": [],
+            "stateMutability": "nonpayable",
             "type": "function"
           },
           {
@@ -161,6 +503,87 @@
                 "internalType": "string",
                 "name": "",
                 "type": "string"
+              }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "redemptionManager",
+            "outputs": [
+              {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+              }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
+              },
+              {
+                "internalType": "address",
+                "name": "callerConfirmation",
+                "type": "address"
+              }
+            ],
+            "name": "renounceRole",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
+              },
+              {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+              }
+            ],
+            "name": "revokeRole",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "address",
+                "name": "_redemptionManager",
+                "type": "address"
+              }
+            ],
+            "name": "setRedemptionManager",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "bytes4",
+                "name": "interfaceId",
+                "type": "bytes4"
+              }
+            ],
+            "name": "supportsInterface",
+            "outputs": [
+              {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
               }
             ],
             "stateMutability": "view",
@@ -245,22 +668,16 @@
             "stateMutability": "nonpayable",
             "type": "function"
           }
-        ],
-        "estimateGas": true,
-        "gas": {
-          "transfer": 70000,
-          "approve": 70000,
-          "balanceOf": 21000
-        }
+        ]
       },
-      "marketplace": {
-        "address": "0xa50a51c09a5c451C52BB714527E1974b686D8e77",
+      "redemptionManager": {
+        "address": "RM_ADDRESS_HERE",
         "abi": [
           {
             "inputs": [
               {
                 "internalType": "address",
-                "name": "_facicoinAddress",
+                "name": "_tokenAddress",
                 "type": "address"
               }
             ],
@@ -268,149 +685,211 @@
             "type": "constructor"
           },
           {
+            "inputs": [],
+            "name": "AccessControlBadConfirmation",
+            "type": "error"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+              },
+              {
+                "internalType": "bytes32",
+                "name": "neededRole",
+                "type": "bytes32"
+              }
+            ],
+            "name": "AccessControlUnauthorizedAccount",
+            "type": "error"
+          },
+          {
             "anonymous": false,
             "inputs": [
               {
-                "indexed": false,
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+              }
+            ],
+            "name": "ResgateCancelado",
+            "type": "event"
+          },
+          {
+            "anonymous": false,
+            "inputs": [
+              {
+                "indexed": true,
                 "internalType": "uint256",
                 "name": "id",
                 "type": "uint256"
               },
               {
-                "indexed": false,
+                "indexed": true,
                 "internalType": "address",
-                "name": "provider",
+                "name": "aluno",
                 "type": "address"
               },
               {
                 "indexed": false,
-                "internalType": "string",
-                "name": "title",
-                "type": "string"
+                "internalType": "uint256",
+                "name": "beneficioId",
+                "type": "uint256"
               },
               {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "price",
+                "name": "valor",
                 "type": "uint256"
+              },
+              {
+                "indexed": false,
+                "internalType": "uint64",
+                "name": "expiraEm",
+                "type": "uint64"
               }
             ],
-            "name": "MentorshipCreated",
+            "name": "ResgateCriado",
             "type": "event"
           },
           {
             "anonymous": false,
             "inputs": [
               {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "mentorshipId",
-                "type": "uint256"
-              },
-              {
-                "indexed": false,
-                "internalType": "address",
-                "name": "buyer",
-                "type": "address"
-              },
-              {
-                "indexed": false,
-                "internalType": "address",
-                "name": "provider",
-                "type": "address"
-              },
-              {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "price",
-                "type": "uint256"
-              }
-            ],
-            "name": "MentorshipPurchased",
-            "type": "event"
-          },
-          {
-            "anonymous": false,
-            "inputs": [
-              {
-                "indexed": false,
+                "indexed": true,
                 "internalType": "uint256",
                 "name": "id",
                 "type": "uint256"
-              },
-              {
-                "indexed": false,
-                "internalType": "string",
-                "name": "name",
-                "type": "string"
-              },
-              {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "price",
-                "type": "uint256"
-              },
-              {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "stock",
-                "type": "uint256"
               }
             ],
-            "name": "ProductCreated",
+            "name": "ResgateExpirado",
             "type": "event"
           },
           {
             "anonymous": false,
             "inputs": [
               {
-                "indexed": false,
+                "indexed": true,
                 "internalType": "uint256",
-                "name": "productId",
-                "type": "uint256"
-              },
-              {
-                "indexed": false,
-                "internalType": "address",
-                "name": "buyer",
-                "type": "address"
-              },
-              {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "price",
+                "name": "id",
                 "type": "uint256"
               }
             ],
-            "name": "ProductPurchased",
+            "name": "ResgateUtilizado",
             "type": "event"
           },
           {
+            "anonymous": false,
             "inputs": [
               {
-                "internalType": "uint256",
-                "name": "_id",
-                "type": "uint256"
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
               },
               {
-                "internalType": "uint256",
-                "name": "_amount",
-                "type": "uint256"
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "previousAdminRole",
+                "type": "bytes32"
+              },
+              {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "newAdminRole",
+                "type": "bytes32"
               }
             ],
-            "name": "addProductStock",
-            "outputs": [],
-            "stateMutability": "nonpayable",
+            "name": "RoleAdminChanged",
+            "type": "event"
+          },
+          {
+            "anonymous": false,
+            "inputs": [
+              {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
+              },
+              {
+                "indexed": true,
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+              },
+              {
+                "indexed": true,
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+              }
+            ],
+            "name": "RoleGranted",
+            "type": "event"
+          },
+          {
+            "anonymous": false,
+            "inputs": [
+              {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
+              },
+              {
+                "indexed": true,
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+              },
+              {
+                "indexed": true,
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+              }
+            ],
+            "name": "RoleRevoked",
+            "type": "event"
+          },
+          {
+            "inputs": [],
+            "name": "CONFIRMER_ROLE",
+            "outputs": [
+              {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+              }
+            ],
+            "stateMutability": "view",
             "type": "function"
           },
           {
             "inputs": [],
-            "name": "admin",
+            "name": "DEFAULT_ADMIN_ROLE",
             "outputs": [
               {
-                "internalType": "address",
+                "internalType": "bytes32",
                 "name": "",
-                "type": "address"
+                "type": "bytes32"
+              }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "MANAGER_ROLE",
+            "outputs": [
+              {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
               }
             ],
             "stateMutability": "view",
@@ -420,11 +899,11 @@
             "inputs": [
               {
                 "internalType": "uint256",
-                "name": "_id",
+                "name": "id",
                 "type": "uint256"
               }
             ],
-            "name": "buyMentorship",
+            "name": "cancelar",
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
@@ -433,11 +912,11 @@
             "inputs": [
               {
                 "internalType": "uint256",
-                "name": "_id",
+                "name": "id",
                 "type": "uint256"
               }
             ],
-            "name": "buyProduct",
+            "name": "confirmarUso",
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
@@ -445,22 +924,12 @@
           {
             "inputs": [
               {
-                "internalType": "string",
-                "name": "_title",
-                "type": "string"
-              },
-              {
-                "internalType": "string",
-                "name": "_description",
-                "type": "string"
-              },
-              {
                 "internalType": "uint256",
-                "name": "_price",
+                "name": "id",
                 "type": "uint256"
               }
             ],
-            "name": "createMentorship",
+            "name": "expirar",
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
@@ -468,34 +937,17 @@
           {
             "inputs": [
               {
-                "internalType": "string",
-                "name": "_name",
-                "type": "string"
-              },
-              {
-                "internalType": "uint256",
-                "name": "_price",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "_stock",
-                "type": "uint256"
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
               }
             ],
-            "name": "createProduct",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          },
-          {
-            "inputs": [],
-            "name": "facicoin",
+            "name": "getRoleAdmin",
             "outputs": [
               {
-                "internalType": "contract ERC20",
+                "internalType": "bytes32",
                 "name": "",
-                "type": "address"
+                "type": "bytes32"
               }
             ],
             "stateMutability": "view",
@@ -504,41 +956,39 @@
           {
             "inputs": [
               {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-              }
-            ],
-            "name": "mentorships",
-            "outputs": [
-              {
-                "internalType": "uint256",
-                "name": "id",
-                "type": "uint256"
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
               },
               {
                 "internalType": "address",
-                "name": "provider",
+                "name": "account",
                 "type": "address"
+              }
+            ],
+            "name": "grantRole",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
               },
               {
-                "internalType": "string",
-                "name": "title",
-                "type": "string"
-              },
-              {
-                "internalType": "string",
-                "name": "description",
-                "type": "string"
-              },
-              {
-                "internalType": "uint256",
-                "name": "price",
-                "type": "uint256"
-              },
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+              }
+            ],
+            "name": "hasRole",
+            "outputs": [
               {
                 "internalType": "bool",
-                "name": "active",
+                "name": "",
                 "type": "bool"
               }
             ],
@@ -547,20 +997,7 @@
           },
           {
             "inputs": [],
-            "name": "nextMentorshipId",
-            "outputs": [
-              {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-              }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-          },
-          {
-            "inputs": [],
-            "name": "nextProductId",
+            "name": "nextResgateId",
             "outputs": [
               {
                 "internalType": "uint256",
@@ -574,36 +1011,120 @@
           {
             "inputs": [
               {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
+              },
+              {
+                "internalType": "address",
+                "name": "callerConfirmation",
+                "type": "address"
               }
             ],
-            "name": "products",
+            "name": "renounceRole",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "uint256",
+                "name": "beneficioId",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "valor",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint64",
+                "name": "expiraEm",
+                "type": "uint64"
+              }
+            ],
+            "name": "resgatar",
             "outputs": [
               {
                 "internalType": "uint256",
                 "name": "id",
                 "type": "uint256"
-              },
+              }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "inputs": [
               {
-                "internalType": "string",
-                "name": "name",
-                "type": "string"
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+              }
+            ],
+            "name": "resgates",
+            "outputs": [
+              {
+                "internalType": "address",
+                "name": "aluno",
+                "type": "address"
               },
               {
                 "internalType": "uint256",
-                "name": "price",
+                "name": "beneficioId",
                 "type": "uint256"
               },
               {
                 "internalType": "uint256",
-                "name": "stock",
+                "name": "valor",
                 "type": "uint256"
               },
+              {
+                "internalType": "uint64",
+                "name": "expiraEm",
+                "type": "uint64"
+              },
+              {
+                "internalType": "enum RedemptionManager.Status",
+                "name": "status",
+                "type": "uint8"
+              }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "bytes32",
+                "name": "role",
+                "type": "bytes32"
+              },
+              {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+              }
+            ],
+            "name": "revokeRole",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "bytes4",
+                "name": "interfaceId",
+                "type": "bytes4"
+              }
+            ],
+            "name": "supportsInterface",
+            "outputs": [
               {
                 "internalType": "bool",
-                "name": "active",
+                "name": "",
                 "type": "bool"
               }
             ],
@@ -611,37 +1132,19 @@
             "type": "function"
           },
           {
-            "inputs": [
+            "inputs": [],
+            "name": "token",
+            "outputs": [
               {
-                "internalType": "uint256",
-                "name": "_id",
-                "type": "uint256"
+                "internalType": "contract WydenCoin",
+                "name": "",
+                "type": "address"
               }
             ],
-            "name": "toggleMentorshipActive",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          },
-          {
-            "inputs": [
-              {
-                "internalType": "uint256",
-                "name": "_id",
-                "type": "uint256"
-              }
-            ],
-            "name": "toggleProductActive",
-            "outputs": [],
-            "stateMutability": "nonpayable",
+            "stateMutability": "view",
             "type": "function"
           }
-        ],
-        "estimateGas": true,
-        "gas": {
-          "createMentorship": 200000,
-          "buyMentorship": 150000
-        }
+        ]
       }
     }
   }
