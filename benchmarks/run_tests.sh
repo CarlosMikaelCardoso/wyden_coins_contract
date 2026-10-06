@@ -24,9 +24,9 @@ cd ~/facicoin/contratos
 node setup_test_data.js
 cd ~/facicoin/benchmarks
 
-echo "=== 4. Rodando Teste 1: Mint Reward (open.yaml) ==="
+echo "=== 4. Rodando Teste 1: Mint Reward ==="
 > caliper_execution.log
-npm run test:open | tee -a caliper_execution.log &
+npm run test:mint | tee -a caliper_execution.log &
 PID_OPEN=$!
 while kill -0 $PID_OPEN 2>/dev/null; do
   if grep -q "Benchmark successfully finished" caliper_execution.log; then
@@ -37,19 +37,19 @@ while kill -0 $PID_OPEN 2>/dev/null; do
   sleep 2
 done
 
-echo "=== 5. Rodando Teste 2: Resgatar (query.yaml) ==="
-> caliper_query_execution.log
-npm run test:query | tee -a caliper_query_execution.log &
+echo "=== 5. Rodando Teste 2: Resgatar ==="
+> caliper_resgatar_execution.log
+npm run test:resgatar | tee -a caliper_resgatar_execution.log &
 PID_QUERY=$!
 while kill -0 $PID_QUERY 2>/dev/null; do
-  if grep -q "Benchmark successfully finished" caliper_query_execution.log; then
+  if grep -q "Benchmark successfully finished" caliper_resgatar_execution.log; then
     sleep 2
     killall -9 node || true
     break
   fi
   sleep 2
 done
-cat caliper_query_execution.log >> caliper_execution.log
+cat caliper_resgatar_execution.log >> caliper_execution.log
 
 echo "=== 6. Rodando Teste 3: Confirmar Uso ==="
 > caliper_confirmar_execution.log

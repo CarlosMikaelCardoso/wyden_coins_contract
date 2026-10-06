@@ -1150,7 +1150,10 @@
           }
         ],
         "gas": {
-          "resgatar": 3000000
+          "resgatar": 3000000,
+          "confirmarUso": 3000000,
+          "cancelar": 3000000,
+          "expirar": 3000000
         }
       }
     }

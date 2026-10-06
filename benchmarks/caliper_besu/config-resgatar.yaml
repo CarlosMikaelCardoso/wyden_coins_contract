@@ -4,13 +4,13 @@ simpleArgs: &simple-args
   numberOfAccounts: &number-of-accounts 20
 
 test:
-  name: simple-query
-  description: Rodada de Query (Consulta) - Besu
+  name: facicoin-resgatar-benchmark
+  description: Teste de carga da funcao resgatar
   workers:
     number: 5
   rounds:
-    - label: query
-      description: Teste de consulta de contas no Besu.
+    - label: resgatar
+      description: Executando resgatar
       txNumber: *number-of-accounts
       rateControl:
         type: fixed-rate

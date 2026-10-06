@@ -4,13 +4,13 @@ simpleArgs: &simple-args
   numberOfAccounts: &number-of-accounts 20
 
 test:
-  name: simple-open
-  description: Rodada de Open (Abertura de Contas) - Besu
+  name: facicoin-mint-benchmark
+  description: Teste de carga da funcao mintReward
   workers:
     number: 5
   rounds:
-    - label: open
-      description: Teste de abertura de contas no Besu.
+    - label: mintReward
+      description: Executando mintReward
       txNumber: *number-of-accounts
       rateControl:
         type: fixed-rate
