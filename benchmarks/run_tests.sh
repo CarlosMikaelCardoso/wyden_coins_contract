@@ -25,11 +25,11 @@ node setup_test_data.js
 cd ~/facicoin/benchmarks
 
 echo "=== 4. Rodando Teste 1: Mint Reward ==="
-> caliper_execution.log
-npm run test:mint | tee -a caliper_execution.log &
+> caliper_mint_execution.log
+npm run test:mint | tee -a caliper_mint_execution.log &
 PID_OPEN=$!
 while kill -0 $PID_OPEN 2>/dev/null; do
-  if grep -q "Benchmark successfully finished" caliper_execution.log; then
+  if grep -q "Benchmark successfully finished" caliper_mint_execution.log; then
     sleep 2
     killall -9 node || true
     break
@@ -37,6 +37,7 @@ while kill -0 $PID_OPEN 2>/dev/null; do
   sleep 2
 done
 
+cat caliper_mint_execution.log > caliper_full_execution.log
 echo "=== 5. Rodando Teste 2: Resgatar ==="
 > caliper_resgatar_execution.log
 npm run test:resgatar | tee -a caliper_resgatar_execution.log &
@@ -49,7 +50,7 @@ while kill -0 $PID_QUERY 2>/dev/null; do
   fi
   sleep 2
 done
-cat caliper_resgatar_execution.log >> caliper_execution.log
+cat caliper_resgatar_execution.log >> caliper_full_execution.log
 
 echo "=== 6. Rodando Teste 3: Confirmar Uso ==="
 > caliper_confirmar_execution.log
@@ -63,7 +64,7 @@ while kill -0 $PID_CONF 2>/dev/null; do
   fi
   sleep 2
 done
-cat caliper_confirmar_execution.log >> caliper_execution.log
+cat caliper_confirmar_execution.log >> caliper_full_execution.log
 
 echo "=== 7. Rodando Teste 4: Cancelar ==="
 > caliper_cancelar_execution.log
@@ -77,7 +78,7 @@ while kill -0 $PID_CANC 2>/dev/null; do
   fi
   sleep 2
 done
-cat caliper_cancelar_execution.log >> caliper_execution.log
+cat caliper_cancelar_execution.log >> caliper_full_execution.log
 
 echo "=== 8. Rodando Teste 5: Expirar ==="
 > caliper_expirar_execution.log
@@ -91,9 +92,9 @@ while kill -0 $PID_EXP 2>/dev/null; do
   fi
   sleep 2
 done
-cat caliper_expirar_execution.log >> caliper_execution.log
+cat caliper_expirar_execution.log >> caliper_full_execution.log
 
 echo "=== Testes finalizados com sucesso! ==="
 
 echo "=== 9. Gerando Relatório e Gráficos ==="
-python3 gerar_relatorio.py caliper_execution.log
+python3 gerar_relatorio.py caliper_full_execution.log
