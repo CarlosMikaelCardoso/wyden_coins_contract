@@ -40,12 +40,6 @@ const wydenCoinAdmin = new ethers.Contract(WYDENCOIN_ADDRESS, WYDENCOIN_ABI, adm
 const redemptionManagerAdmin = new ethers.Contract(REDEMPTION_MANAGER_ADDRESS, REDEMPTION_MANAGER_ABI, adminWallet);
 
 
-// ==========================================
-// 2. Exemplos de Chamadas para a Equipe de Backend
-// ==========================================
-// Aqui estão os códigos-base que a equipe de integração (Luiz Felipe e Henrique) 
-// podem usar para interagir com a blockchain WydenCoin.
-
 /**
  * EXEMPLO 1: Ler o saldo do aluno
  * Como a leitura (view) não gasta taxa de transação e não altera estado, 
