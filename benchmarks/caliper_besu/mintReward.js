@@ -6,26 +6,37 @@ class MintRewardWorkload extends WorkloadModuleBase {
     constructor() {
         super();
         this.txIndex = 0;
+        this.motivos = [
+            "PRESENCA_AULA", "PROJETO_EXTENSAO", "BOM_COMPORTAMENTO", 
+            "NOTA_MAXIMA", "AJUDA_COLEGA"
+        ];
     }
 
     async initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext) {
         await super.initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext);
-        // Pode gerar endereços aleatórios se quiser
     }
 
     async submitTransaction() {
         this.txIndex++;
-        // Aluno aleatório ou fake
-        const aluno = "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73";
-        // Convert string to bytes32 format by padding or hashing
-        // Let's just use a padded hex string for "SIA_15D"
-        const motivo = "0x5349415f31354400000000000000000000000000000000000000000000000000";
-        const valor = 20;
+        
+        // Simula alunos diferentes (gerando endereços hex aleatórios para fins de demonstração)
+        const randomAluno = "0x" + Math.floor(Math.random() * 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF).toString(16).padStart(40, '0');
+        
+        // Sorteia um motivo e um valor
+        const indexMotivo = Math.floor(Math.random() * this.motivos.length);
+        const motivoSorteado = this.motivos[indexMotivo];
+        const valorAleatorio = Math.floor(Math.random() * 50) + 10; // De 10 a 60 WC
+
+        // Converte string para hex (Caliper manda pro ethers, mas enviamos em hex para o bytes32)
+        // Função auxiliar simples para bytes32
+        const motivoHex = "0x" + Buffer.from(motivoSorteado, 'utf8').toString('hex').padEnd(64, '0');
+
+        console.log(`[Worker ${this.workerIndex}] 🪙 -> Transferindo ${valorAleatorio} WC para o aluno ${randomAluno.slice(0, 8)}... | Motivo: ${motivoSorteado}`);
 
         const request = {
             contract: 'wydenCoin',
             verb: 'mintReward',
-            args: [aluno, valor, motivo],
+            args: [randomAluno, valorAleatorio, motivoHex],
             readOnly: false
         };
 

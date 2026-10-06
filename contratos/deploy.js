@@ -54,6 +54,14 @@ async function main() {
         RedemptionManager: rmAddress
     };
     fs.writeFileSync('addresses.json', JSON.stringify(addrs, null, 2));
+    console.log("\n-> Concedendo MINTER_ROLE para os Workers do Caliper...");
+    const seed = "0x3f841bf589fdf83a521e55d51afddc34fa65351161eead24f064855fc29c9580";
+    const hdNode = ethers.HDNodeWallet.fromSeed(seed);
+    for(let i=0; i<10; i++) {
+        const workerAddr = hdNode.derivePath(`m/44\x27/60\x27/0\x27/0/${i}`).address;
+        await (await wcContract.grantRole(MINTER_ROLE, workerAddr)).wait();
+    }
+    console.log("[OK] Workers autorizados!");
     console.log("Endereços salvos em addresses.json");
 }
 
