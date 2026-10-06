@@ -10,9 +10,26 @@ class ResgatarWorkload extends WorkloadModuleBase {
 
     async initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext) {
         await super.initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext);
-        // Primeiro, é preciso que a conta tenha saldo e allowance para o RedemptionManager
-        // A conta padrao do Caliper deve chamar 'approve' uma vez no WydenCoin
-        // Para simplificar o teste, vamos assumir que o approve e mint já foi dado (ou faremos no setup).
+        
+        // Pega o endereço real do RedemptionManager pelo sutAdapter
+        const rmAddress = this.sutAdapter.getContractInfo ? 
+                          (this.sutAdapter.getContractInfo('redemptionManager') || {}).address || "0x686AfD6e502A81D2e77f2e038A23C0dEf4949A20" : 
+                          "0x686AfD6e502A81D2e77f2e038A23C0dEf4949A20";
+
+        const request = {
+            contract: 'wydenCoin',
+            verb: 'approve',
+            args: [rmAddress, 999999999], 
+            readOnly: false
+        };
+        try {
+            await this.sutAdapter.sendRequests(request);
+        } catch (e) {
+            console.log("Worker", workerIndex, "approve transaction issue:", e.message);
+        }
+        
+        // Espera a transação ser minerada pelo Besu (já que sendRequests as vezes retorna rapido demais e da Known Transaction)
+        await new Promise(resolve => setTimeout(resolve, 5000));
     }
 
     async submitTransaction() {

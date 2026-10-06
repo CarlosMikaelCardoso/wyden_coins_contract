@@ -37,7 +37,8 @@ class MintRewardWorkload extends WorkloadModuleBase {
             contract: 'wydenCoin',
             verb: 'mintReward',
             args: [randomAluno, valorAleatorio, motivoHex],
-            readOnly: false
+            readOnly: false,
+            gas: 3000000 // force gas limit to avoid missing gas error
         };
 
         return this.sutAdapter.sendRequests(request);

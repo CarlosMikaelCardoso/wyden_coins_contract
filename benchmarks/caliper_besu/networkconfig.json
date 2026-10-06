@@ -668,7 +668,11 @@
             "stateMutability": "nonpayable",
             "type": "function"
           }
-        ]
+        ],
+        "gas": {
+          "mintReward": 3000000,
+          "approve": 3000000
+        }
       },
       "redemptionManager": {
         "address": "0x686AfD6e502A81D2e77f2e038A23C0dEf4949A20",
@@ -1144,7 +1148,10 @@
             "stateMutability": "view",
             "type": "function"
           }
-        ]
+        ],
+        "gas": {
+          "resgatar": 3000000
+        }
       }
     }
   }
