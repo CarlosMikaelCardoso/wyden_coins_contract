@@ -6,7 +6,10 @@
     "test:open": "npx caliper launch manager --caliper-workspace . --caliper-networkconfig caliper_besu/networkconfig.json --caliper-benchconfig caliper_besu/config-open.yaml --caliper-flow-skip-install",
     "test:query": "npx caliper launch manager --caliper-workspace . --caliper-networkconfig caliper_besu/networkconfig.json --caliper-benchconfig caliper_besu/config-query.yaml --caliper-flow-skip-install",
     "test:transfer": "npx caliper launch manager --caliper-workspace . --caliper-networkconfig caliper_besu/networkconfig.json --caliper-benchconfig caliper_besu/config-transfer.yaml --caliper-flow-skip-install",
-    "test:all": "npm run test:open && npm run test:query && npm run test:transfer"
+    "test:all": "npm run test:open && npm run test:query && npm run test:transfer",
+    "test:confirmar": "npx caliper launch manager --caliper-workspace . --caliper-networkconfig caliper_besu/networkconfig.json --caliper-benchconfig caliper_besu/config-confirmar.yaml --caliper-flow-skip-install",
+    "test:cancelar": "npx caliper launch manager --caliper-workspace . --caliper-networkconfig caliper_besu/networkconfig.json --caliper-benchconfig caliper_besu/config-cancelar.yaml --caliper-flow-skip-install",
+    "test:expirar": "npx caliper launch manager --caliper-workspace . --caliper-networkconfig caliper_besu/networkconfig.json --caliper-benchconfig caliper_besu/config-expirar.yaml --caliper-flow-skip-install"
   },
   "dependencies": {
     "@hyperledger/caliper-cli": "^0.6.0",

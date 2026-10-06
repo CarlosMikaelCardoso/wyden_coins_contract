@@ -1,0 +1,15 @@
+test:
+  name: facicoin-expirar-benchmark
+  description: Teste de carga da funcao expirar
+  workers:
+    type: local
+    number: 5
+  rounds:
+    - label: expirar
+      txNumber: 20
+      rateControl:
+        type: fixed-rate
+        opts:
+          tps: 10
+      workload:
+        module: caliper_besu/expirar.js
