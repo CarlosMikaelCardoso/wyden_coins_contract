@@ -2,8 +2,8 @@
 set -e
 
 echo "=== 1. Lendo endereços do deploy ==="
-WC_ADDRESS=$(cat ~/facicoin/contratos/addresses.json | jq -r .WydenCoin)
-RM_ADDRESS=$(cat ~/facicoin/contratos/addresses.json | jq -r .RedemptionManager)
+WC_ADDRESS=$(cat ../contratos/addresses.json | jq -r .WydenCoin)
+RM_ADDRESS=$(cat ../contratos/addresses.json | jq -r .RedemptionManager)
 
 echo "WydenCoin: $WC_ADDRESS"
 echo "RedemptionManager: $RM_ADDRESS"
@@ -20,9 +20,9 @@ echo "=== 3. Instalando dependências do Caliper ==="
 npm install
 
 echo "=== 3.5. Dando permissões, saldo e criando resgates iniciais ==="
-cd ~/facicoin/contratos
+cd ../contratos
 node setup_test_data.js
-cd ~/facicoin/benchmarks
+cd ../benchmarks
 
 echo "=== 4. Rodando Teste 1: Mint Reward ==="
 > caliper_mint_execution.log
