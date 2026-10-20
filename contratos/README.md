@@ -13,10 +13,29 @@ Esta documentação explica a arquitetura e o funcionamento dos contratos inteli
 ### Funções para a API
 
 #### `mintReward(address aluno, uint256 valor, bytes32 motivo)`
-Gera novas moedas para a carteira de um aluno.
+Gera novas moedas para a carteira de um aluno individual.
 - **`aluno`**: O endereço da carteira vinculada ao aluno.
 - **`valor`**: A quantidade de WydenCoins a ser creditada.
-- **`motivo`**: Um identificador curto (em formato `bytes32`) do motivo do ganho. Exemplos: `ESTUDO_30`, `SIA_ACESSO`, `ENACTUS_LIXO`.
+- **`motivo`**: Um identificador curto (em formato `bytes32`) do motivo do ganho. Exemplos: `SIA_15D`, `PRES_15D`, `SIMULADO`.
+
+#### `mintRewardBatch(address[] calldata alunos, uint256[] calldata valores, bytes32[] calldata motivos)`
+Gera novas moedas em lote para dezenas/centenas de alunos em uma única transação atômica. Ideal para o processamento quinzenal do Motor de Recompensas.
+- **`alunos`**: Lista de endereços das carteiras dos alunos.
+- **`valores`**: Lista de quantidades correspondentes em WydenCoins.
+- **`motivos`**: Lista de códigos de regra (`bytes32`). Cada par `(aluno, valor, motivo)` emite o respectivo evento `RewardMinted`.
+
+### Tabela de Códigos de Regras (Motivos de Emissão)
+
+| Código (`motivo`) | Descrição para o Extrato do Aluno | Condição / Critério | Valor Típico |
+|-------------------|-----------------------------------|---------------------|--------------|
+| `SIA_15D` | Acesso regular ao SIA (15 dias) | Acessou nos últimos 15 dias | 20 WC |
+| `PRES_15D` | Frequência presencial regular | Alunos presenciais com $\ge 75\%$ de presença | 30 a 50 WC |
+| `SIMULADO` | Participação no Simulado | Adesão completa ou parcial ao Simulado | 15 a 30 WC |
+| `DIG_ESTUDO` | Engajamento no Ambiente Digital | Alunos do curso Digital com acesso no ciclo | 50 WC |
+| `VOLTOU` | Bônus Retomada aos Estudos (Anti-Evasão) | Alunos com $>30$ dias inativos que retornaram | 100 WC |
+| `CR_SEM` | Reconhecimento de Desempenho (CR) | Pago 1x/semestre para alunos com CR $\ge 6.0$ | 25 a 40 WC |
+| `ESTUDO_30` | *(Reservada)* 30% tempo de estudo | Aguardando envio das horas pela coordenação | 100 WC |
+| `ESTUDO_SUBIU` | *(Reservada)* Tempo de estudo subiu | Aguardando envio das horas pela coordenação | Bônus |
 
 ### Eventos (Para o Indexador do Dashboard)
 - `RewardMinted(address indexed aluno, uint256 valor, bytes32 motivo)`: Emitido sempre que novas moedas são dadas. O indexador no Node.js pode escutar esse evento para gerar o extrato detalhado do aluno e atualizar os indicadores da gestão.
@@ -97,4 +116,30 @@ const expiraEm = Math.floor(Date.now() / 1000) + 86400; // Validade de 1 dia
 const tx = await redemptionManagerContract.resgatar(beneficioId, 50, expiraEm);
 const receipt = await tx.wait();
 // Capturar o 'id' do evento ResgateCriado no receipt para salvar no PostgreSQL
+```
+
+5. **Chamada de Emissão em Lote (Motor de Recompensas):**
+```javascript
+// Exemplo Node.js para processar um ciclo quinzenal inteiro
+const alunos = ["0x...", "0x..."];
+const valores = [20, 50];
+const motivos = [
+    ethers.encodeBytes32String("SIA_15D"),
+    ethers.encodeBytes32String("PRES_15D")
+];
+
+const tx = await wydenCoinContract.mintRewardBatch(alunos, valores, motivos);
+await tx.wait();
+```
+
+---
+
+## Como Rodar os Testes
+
+Para validar a compilação e a função de emissão em lote utilizando a base real de 66 alunos da simulação:
+
+```bash
+cd contratos
+npm run compile
+npm test
 ```

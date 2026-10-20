@@ -6,6 +6,8 @@ package-lock.json
 # Compilados Solidity
 build/
 **/build/
+build_root/
+**/build_root/
 artifacts/
 cache/
 

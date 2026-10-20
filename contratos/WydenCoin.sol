@@ -32,6 +32,22 @@ contract WydenCoin is ERC20, ERC20Burnable, AccessControl {
         emit RewardMinted(aluno, valor, motivo);
     }
 
+    // Função de emissão em lote para processar ciclos de dezenas de alunos eficientemente
+    function mintRewardBatch(
+        address[] calldata alunos,
+        uint256[] calldata valores,
+        bytes32[] calldata motivos
+    ) external onlyRole(MINTER_ROLE) {
+        require(
+            alunos.length == valores.length && valores.length == motivos.length,
+            "WydenCoin: arrays devem ter o mesmo tamanho"
+        );
+        for (uint256 i = 0; i < alunos.length; i++) {
+            _mint(alunos[i], valores[i]);
+            emit RewardMinted(alunos[i], valores[i], motivos[i]);
+        }
+    }
+
     // Sobrescrevemos o hook de atualização de saldo para bloquear transferências
     // P2P (entre alunos) evitando comércio paralelo das moedas.
     function _update(address from, address to, uint256 value) internal override {

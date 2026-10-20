@@ -1,0 +1,1532 @@
+{
+  "ciclo": "2026-SET-Q2",
+  "total_alunos": 66,
+  "total_emissoes": 213,
+  "total_wc_distribuido": 6730,
+  "alunos": [
+    {
+      "matricula": "202108227161",
+      "bu": "DIGITAL",
+      "total_wc": 100,
+      "itens": [
+        {
+          "motivo": "VOLTOU",
+          "valor": 100,
+          "descricao": "Bonus Retomada aos Estudos (Anti-Evasao)"
+        }
+      ]
+    },
+    {
+      "matricula": "202108636134",
+      "bu": "PRESENCIAL",
+      "total_wc": 70,
+      "itens": [
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 9.2)"
+        }
+      ]
+    },
+    {
+      "matricula": "202203673891",
+      "bu": "PRESENCIAL",
+      "total_wc": 20,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        }
+      ]
+    },
+    {
+      "matricula": "202203891944",
+      "bu": "PRESENCIAL",
+      "total_wc": 120,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 30,
+          "descricao": "Frequencia presencial moderada (40%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 10.0)"
+        }
+      ]
+    },
+    {
+      "matricula": "202209062095",
+      "bu": "PRESENCIAL",
+      "total_wc": 90,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 9.4)"
+        }
+      ]
+    },
+    {
+      "matricula": "202302415652",
+      "bu": "PRESENCIAL",
+      "total_wc": 125,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (100%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 25,
+          "descricao": "Merito academico (CR 7.0)"
+        }
+      ]
+    },
+    {
+      "matricula": "202302695401",
+      "bu": "PRESENCIAL",
+      "total_wc": 80,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 30,
+          "descricao": "Frequencia presencial moderada (66%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        }
+      ]
+    },
+    {
+      "matricula": "202303021631",
+      "bu": "PRESENCIAL",
+      "total_wc": 95,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (100%)"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 25,
+          "descricao": "Merito academico (CR 6.25)"
+        }
+      ]
+    },
+    {
+      "matricula": "202304057079",
+      "bu": "PRESENCIAL",
+      "total_wc": 60,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 10.0)"
+        }
+      ]
+    },
+    {
+      "matricula": "202304057109",
+      "bu": "PRESENCIAL",
+      "total_wc": 40,
+      "itens": [
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 9.98)"
+        }
+      ]
+    },
+    {
+      "matricula": "202304237123",
+      "bu": "PRESENCIAL",
+      "total_wc": 90,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.93)"
+        }
+      ]
+    },
+    {
+      "matricula": "202304468516",
+      "bu": "PRESENCIAL",
+      "total_wc": 120,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 30,
+          "descricao": "Frequencia presencial moderada (50%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.58)"
+        }
+      ]
+    },
+    {
+      "matricula": "202304472998",
+      "bu": "PRESENCIAL",
+      "total_wc": 75,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 25,
+          "descricao": "Merito academico (CR 7.94)"
+        }
+      ]
+    },
+    {
+      "matricula": "202307040398",
+      "bu": "DIGITAL",
+      "total_wc": 110,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "DIG_ESTUDO",
+          "valor": 50,
+          "descricao": "Engajamento no Ambiente Digital"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.64)"
+        }
+      ]
+    },
+    {
+      "matricula": "202308612298",
+      "bu": "DIGITAL",
+      "total_wc": 125,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "DIG_ESTUDO",
+          "valor": 50,
+          "descricao": "Engajamento no Ambiente Digital"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 15,
+          "descricao": "Adesao parcial ao Simulado Online"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 9.74)"
+        }
+      ]
+    },
+    {
+      "matricula": "202308668684",
+      "bu": "PRESENCIAL",
+      "total_wc": 125,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (100%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 25,
+          "descricao": "Merito academico (CR 7.53)"
+        }
+      ]
+    },
+    {
+      "matricula": "202401239275",
+      "bu": "DIGITAL",
+      "total_wc": 95,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "DIG_ESTUDO",
+          "valor": 50,
+          "descricao": "Engajamento no Ambiente Digital"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 25,
+          "descricao": "Merito academico (CR 7.62)"
+        }
+      ]
+    },
+    {
+      "matricula": "202401607738",
+      "bu": "DIGITAL",
+      "total_wc": 140,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "DIG_ESTUDO",
+          "valor": 50,
+          "descricao": "Engajamento no Ambiente Digital"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado Online"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 9.08)"
+        }
+      ]
+    },
+    {
+      "matricula": "202402390091",
+      "bu": "PRESENCIAL",
+      "total_wc": 60,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.95)"
+        }
+      ]
+    },
+    {
+      "matricula": "202403092328",
+      "bu": "PRESENCIAL",
+      "total_wc": 140,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (100%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 9.98)"
+        }
+      ]
+    },
+    {
+      "matricula": "202403475031",
+      "bu": "PRESENCIAL",
+      "total_wc": 100,
+      "itens": [
+        {
+          "motivo": "PRES_15D",
+          "valor": 30,
+          "descricao": "Frequencia presencial moderada (66%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 9.4)"
+        }
+      ]
+    },
+    {
+      "matricula": "202403486377",
+      "bu": "PRESENCIAL",
+      "total_wc": 140,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (100%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.7)"
+        }
+      ]
+    },
+    {
+      "matricula": "202403694115",
+      "bu": "PRESENCIAL",
+      "total_wc": 20,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        }
+      ]
+    },
+    {
+      "matricula": "202403971275",
+      "bu": "PRESENCIAL",
+      "total_wc": 90,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 30,
+          "descricao": "Frequencia presencial moderada (50%)"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 9.76)"
+        }
+      ]
+    },
+    {
+      "matricula": "202404152243",
+      "bu": "PRESENCIAL",
+      "total_wc": 70,
+      "itens": [
+        {
+          "motivo": "PRES_15D",
+          "valor": 30,
+          "descricao": "Frequencia presencial moderada (50%)"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.92)"
+        }
+      ]
+    },
+    {
+      "matricula": "202404152707",
+      "bu": "PRESENCIAL",
+      "total_wc": 105,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 30,
+          "descricao": "Frequencia presencial moderada (66%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 15,
+          "descricao": "Adesao parcial ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.27)"
+        }
+      ]
+    },
+    {
+      "matricula": "202404170314",
+      "bu": "PRESENCIAL",
+      "total_wc": 100,
+      "itens": [
+        {
+          "motivo": "PRES_15D",
+          "valor": 30,
+          "descricao": "Frequencia presencial moderada (50%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.52)"
+        }
+      ]
+    },
+    {
+      "matricula": "202404170527",
+      "bu": "PRESENCIAL",
+      "total_wc": 140,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (100%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 9.52)"
+        }
+      ]
+    },
+    {
+      "matricula": "202404216161",
+      "bu": "PRESENCIAL",
+      "total_wc": 140,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (100%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 9.33)"
+        }
+      ]
+    },
+    {
+      "matricula": "202404369791",
+      "bu": "PRESENCIAL",
+      "total_wc": 140,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (100%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.64)"
+        }
+      ]
+    },
+    {
+      "matricula": "202404493237",
+      "bu": "PRESENCIAL",
+      "total_wc": 140,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (100%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 9.38)"
+        }
+      ]
+    },
+    {
+      "matricula": "202409114951",
+      "bu": "DIGITAL",
+      "total_wc": 0,
+      "itens": []
+    },
+    {
+      "matricula": "202409154503",
+      "bu": "PRESENCIAL",
+      "total_wc": 125,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (100%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 15,
+          "descricao": "Adesao parcial ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.63)"
+        }
+      ]
+    },
+    {
+      "matricula": "202409264988",
+      "bu": "PRESENCIAL",
+      "total_wc": 90,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 9.68)"
+        }
+      ]
+    },
+    {
+      "matricula": "202501586198",
+      "bu": "DIGITAL",
+      "total_wc": 0,
+      "itens": []
+    },
+    {
+      "matricula": "202502276729",
+      "bu": "PRESENCIAL",
+      "total_wc": 110,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (100%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 15,
+          "descricao": "Adesao parcial ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 25,
+          "descricao": "Merito academico (CR 7.9)"
+        }
+      ]
+    },
+    {
+      "matricula": "202502323281",
+      "bu": "PRESENCIAL",
+      "total_wc": 120,
+      "itens": [
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (75%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.58)"
+        }
+      ]
+    },
+    {
+      "matricula": "202502519346",
+      "bu": "PRESENCIAL",
+      "total_wc": 120,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 30,
+          "descricao": "Frequencia presencial moderada (66%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.87)"
+        }
+      ]
+    },
+    {
+      "matricula": "202503229961",
+      "bu": "PRESENCIAL",
+      "total_wc": 140,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (75%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 9.43)"
+        }
+      ]
+    },
+    {
+      "matricula": "202503365504",
+      "bu": "PRESENCIAL",
+      "total_wc": 125,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (100%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 25,
+          "descricao": "Merito academico (CR 7.03)"
+        }
+      ]
+    },
+    {
+      "matricula": "202503365611",
+      "bu": "PRESENCIAL",
+      "total_wc": 105,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 30,
+          "descricao": "Frequencia presencial moderada (66%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 25,
+          "descricao": "Merito academico (CR 6.65)"
+        }
+      ]
+    },
+    {
+      "matricula": "202503365644",
+      "bu": "PRESENCIAL",
+      "total_wc": 75,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 15,
+          "descricao": "Adesao parcial ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.47)"
+        }
+      ]
+    },
+    {
+      "matricula": "202503365652",
+      "bu": "PRESENCIAL",
+      "total_wc": 100,
+      "itens": [
+        {
+          "motivo": "PRES_15D",
+          "valor": 30,
+          "descricao": "Frequencia presencial moderada (50%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.38)"
+        }
+      ]
+    },
+    {
+      "matricula": "202503754306",
+      "bu": "PRESENCIAL",
+      "total_wc": 90,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.75)"
+        }
+      ]
+    },
+    {
+      "matricula": "202504040391",
+      "bu": "PRESENCIAL",
+      "total_wc": 125,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (100%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 25,
+          "descricao": "Merito academico (CR 7.53)"
+        }
+      ]
+    },
+    {
+      "matricula": "202504234284",
+      "bu": "PRESENCIAL",
+      "total_wc": 140,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (100%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 9.36)"
+        }
+      ]
+    },
+    {
+      "matricula": "202508384361",
+      "bu": "PRESENCIAL",
+      "total_wc": 105,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 30,
+          "descricao": "Frequencia presencial moderada (40%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 15,
+          "descricao": "Adesao parcial ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.66)"
+        }
+      ]
+    },
+    {
+      "matricula": "202508600153",
+      "bu": "PRESENCIAL",
+      "total_wc": 105,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 30,
+          "descricao": "Frequencia presencial moderada (50%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 15,
+          "descricao": "Adesao parcial ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 9.26)"
+        }
+      ]
+    },
+    {
+      "matricula": "202603264416",
+      "bu": "DIGITAL",
+      "total_wc": 0,
+      "itens": []
+    },
+    {
+      "matricula": "202603268306",
+      "bu": "PRESENCIAL",
+      "total_wc": 140,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (83%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.58)"
+        }
+      ]
+    },
+    {
+      "matricula": "202603268314",
+      "bu": "PRESENCIAL",
+      "total_wc": 90,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 30,
+          "descricao": "Frequencia presencial moderada (57%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 15,
+          "descricao": "Adesao parcial ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 25,
+          "descricao": "Merito academico (CR 7.92)"
+        }
+      ]
+    },
+    {
+      "matricula": "202603348211",
+      "bu": "DIGITAL",
+      "total_wc": 110,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "DIG_ESTUDO",
+          "valor": 50,
+          "descricao": "Engajamento no Ambiente Digital"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 10.0)"
+        }
+      ]
+    },
+    {
+      "matricula": "202603414841",
+      "bu": "PRESENCIAL",
+      "total_wc": 105,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 30,
+          "descricao": "Frequencia presencial moderada (60%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 15,
+          "descricao": "Adesao parcial ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.94)"
+        }
+      ]
+    },
+    {
+      "matricula": "202603414851",
+      "bu": "PRESENCIAL",
+      "total_wc": 125,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (100%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 25,
+          "descricao": "Merito academico (CR 6.3)"
+        }
+      ]
+    },
+    {
+      "matricula": "202603414868",
+      "bu": "PRESENCIAL",
+      "total_wc": 125,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (80%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 25,
+          "descricao": "Merito academico (CR 7.8)"
+        }
+      ]
+    },
+    {
+      "matricula": "202603414876",
+      "bu": "PRESENCIAL",
+      "total_wc": 140,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (80%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 9.66)"
+        }
+      ]
+    },
+    {
+      "matricula": "202603414892",
+      "bu": "PRESENCIAL",
+      "total_wc": 70,
+      "itens": [
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.78)"
+        }
+      ]
+    },
+    {
+      "matricula": "202603414906",
+      "bu": "PRESENCIAL",
+      "total_wc": 140,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (100%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 9.4)"
+        }
+      ]
+    },
+    {
+      "matricula": "202603414914",
+      "bu": "PRESENCIAL",
+      "total_wc": 140,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (100%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.08)"
+        }
+      ]
+    },
+    {
+      "matricula": "202603495248",
+      "bu": "PRESENCIAL",
+      "total_wc": 100,
+      "itens": [
+        {
+          "motivo": "PRES_15D",
+          "valor": 30,
+          "descricao": "Frequencia presencial moderada (66%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 9.06)"
+        }
+      ]
+    },
+    {
+      "matricula": "202603512657",
+      "bu": "PRESENCIAL",
+      "total_wc": 120,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 30,
+          "descricao": "Frequencia presencial moderada (60%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 10.0)"
+        }
+      ]
+    },
+    {
+      "matricula": "202603523381",
+      "bu": "PRESENCIAL",
+      "total_wc": 140,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (83%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 9.84)"
+        }
+      ]
+    },
+    {
+      "matricula": "202603556379",
+      "bu": "PRESENCIAL",
+      "total_wc": 120,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 30,
+          "descricao": "Frequencia presencial moderada (66%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 40,
+          "descricao": "Merito academico (CR 8.04)"
+        }
+      ]
+    },
+    {
+      "matricula": "202604475453",
+      "bu": "PRESENCIAL",
+      "total_wc": 110,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (100%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 15,
+          "descricao": "Adesao parcial ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 25,
+          "descricao": "Merito academico (CR 7.06)"
+        }
+      ]
+    },
+    {
+      "matricula": "202605009111",
+      "bu": "PRESENCIAL",
+      "total_wc": 90,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 30,
+          "descricao": "Frequencia presencial moderada (57%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 15,
+          "descricao": "Adesao parcial ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 25,
+          "descricao": "Merito academico (CR 7.0)"
+        }
+      ]
+    },
+    {
+      "matricula": "202605031141",
+      "bu": "PRESENCIAL",
+      "total_wc": 125,
+      "itens": [
+        {
+          "motivo": "SIA_15D",
+          "valor": 20,
+          "descricao": "Acesso regular ao SIA (quinzena)"
+        },
+        {
+          "motivo": "PRES_15D",
+          "valor": 50,
+          "descricao": "Frequencia presencial alta (81%)"
+        },
+        {
+          "motivo": "SIMULADO",
+          "valor": 30,
+          "descricao": "Adesao completa ao Simulado"
+        },
+        {
+          "motivo": "CR_SEM",
+          "valor": 25,
+          "descricao": "Merito academico (CR 6.7)"
+        }
+      ]
+    }
+  ]
+}
