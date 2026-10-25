@@ -1,0 +1,14 @@
+# ==============================================================================
+# Permissões Locais do Nó Hyperledger Besu (Allowlist)
+# ==============================================================================
+
+# Lista de Enodes autorizados a comunicar na rede P2P
+nodes-allowlist=[
+  ${NODES_ALLOWLIST}
+]
+
+# Lista de contas autorizadas a emitir transações (se permissionamento de contas estiver ativo)
+accounts-allowlist=[
+  "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73",
+  ${ACCOUNTS_ALLOWLIST}
+]

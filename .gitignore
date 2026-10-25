@@ -27,6 +27,8 @@ rede/genesis.json
 rede/*.tar.gz
 rede/data/
 rede/database/
+rede/dist/
+rede/build/
 
 # Arquivos de Sistema
 .DS_Store

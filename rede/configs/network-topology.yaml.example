@@ -1,0 +1,67 @@
+# ==============================================================================
+# Topologia da Rede Hyperledger Besu Multi-Node (WydenCoin)
+# Inspirado no modelo de configuração do Projeto Ilíada (RNP)
+# ==============================================================================
+
+network:
+  name: "wydencoin-network"
+  chainId: 381660001
+  consensus: "qbft"
+  blockPeriodSeconds: 2
+  minGasPrice: 0
+
+# Definição das máquinas e nós participantes da rede
+nodes:
+  # Máquina 1: Coordenadora, Bootnode e Primeiro Validador
+  - id: "node1"
+    role: "validator"
+    bootnode: true
+    name: "Validator-1 (Bootnode)"
+    ip: "192.168.100.184"       # Ajuste para o IP real da Máquina 1
+    p2pPort: 30303
+    rpcHttp: false              # Validador não precisa expor RPC público
+    wsEnabled: false
+
+  # Máquina 2: Segundo Validador QBFT
+  - id: "node2"
+    role: "validator"
+    bootnode: false
+    name: "Validator-2"
+    ip: "192.168.100.146"       # Ajuste para o IP real da Máquina 2
+    p2pPort: 30303
+    rpcHttp: false
+    wsEnabled: false
+
+  # Máquina 3: Terceiro Validador QBFT
+  - id: "node3"
+    role: "validator"
+    bootnode: false
+    name: "Validator-3"
+    ip: "192.168.100.142"       # Ajuste para o IP real da Máquina 3
+    p2pPort: 30303
+    rpcHttp: false
+    wsEnabled: false
+
+  # Máquina 4: Quarto Validador QBFT
+  - id: "node4"
+    role: "validator"
+    bootnode: false
+    name: "Validator-4"
+    ip: "192.168.100.150"       # Ajuste para o IP real da Máquina 4
+    p2pPort: 30303
+    rpcHttp: false
+    wsEnabled: false
+
+  # Máquina 5: Nó RPC / Gateway para API, Caliper e MetaMask
+  - id: "rpcnode"
+    role: "rpc"
+    bootnode: false
+    name: "RPC-Gateway"
+    ip: "192.168.100.143"       # Ajuste para o IP da Máquina RPC (ex: JMeter)
+    p2pPort: 30303
+    rpcHttp: true
+    rpcHttpPort: 8545
+    wsEnabled: true
+    wsPort: 8645
+    metricsEnabled: true
+    metricsPort: 9545
