@@ -1,69 +1,61 @@
 # Arquitetura da Rede Hyperledger Besu Multi-Node (WydenCoin)
 
-Este documento detalha o desenho de arquitetura de rede distribuída entre múltiplas máquinas físicas ou virtuais distintas, inspirado nas melhores práticas desenvolvidas pelo projeto **Ilíada (RNP)** no repositório `cenarios-bevel`.
+Este documento detalha o desenho de arquitetura de rede distribuída entre **4 máquinas virtuais (VMs)** distintas, inspirado nas melhores práticas desenvolvidas pelo projeto **Ilíada (RNP)** no repositório `cenarios-bevel`.
 
 ---
 
-## 1. Topologia da Rede
+## 1. Topologia da Rede (4 VMs)
 
-A rede é baseada no algoritmo de consenso **QBFT (Quorum Byzantine Fault Tolerance)** configurado para 4 nós validadores com tolerância a até 1 nó faltoso ou malicioso ($F = \lfloor (N - 1) / 3 \rfloor = 1$ quando $N = 4$).
+A rede é baseada no algoritmo de consenso **QBFT (Quorum Byzantine Fault Tolerance)** com **3 nós validadores** e **1 nó de gateway/RPC** para consultas, API e testes de carga (Caliper/JMeter):
 
 ```mermaid
 graph TD
-    subgraph M1["Máquina 1 (Coordenadora / Bootnode)"]
+    subgraph M1["VM 1 (Coordenadora / Bootnode)"]
         N1["Nó Validador 1<br/>(P2P: 30303)"]
     end
 
-    subgraph M2["Máquina 2 (Validador 2)"]
+    subgraph M2["VM 2 (Validador 2)"]
         N2["Nó Validador 2<br/>(P2P: 30303)"]
     end
 
-    subgraph M3["Máquina 3 (Validador 3)"]
+    subgraph M3["VM 3 (Validador 3)"]
         N3["Nó Validador 3<br/>(P2P: 30303)"]
     end
 
-    subgraph M4["Máquina 4 (Validador 4)"]
-        N4["Nó Validador 4<br/>(P2P: 30303)"]
-    end
-
-    subgraph M5["Máquina 5 (Gateway RPC / Membro)"]
+    subgraph M4["VM 4 (Gateway RPC / Consultas)"]
         RPC["Nó RPC Membro<br/>(P2P: 30303, RPC: 8545, WS: 8645)"]
     end
 
     N1 <==> N2
     N1 <==> N3
-    N1 <==> N4
     N1 <==> RPC
     N2 <==> N3
-    N3 <==> N4
-    N2 <==> N4
     RPC <==> N2
     RPC <==> N3
-    RPC <==> N4
 ```
 
 ---
 
 ## 2. Papéis dos Nós (Roles)
 
-### A. Máquina Coordenadora / Bootnode (Nó 1)
+### A. VM 1: Coordenadora / Bootnode (Validador 1)
 * **Papel:** Ponto de ancoragem para descoberta P2P e Validador inicial da rede.
 * **Geração Criptográfica:** É a máquina que executa a geração do bloco gênese (`genesis.json`), chaves dos validadores e allowlists.
 * **Empacotamento:** Cria os pacotes de distribuição (`dist/*.tar.gz`) que serão transferidos para as outras máquinas via `scp`.
 * **Portas Abertas:** `30303` TCP/UDP (P2P Discovery).
 
-### B. Máquinas Validadoras (Nós 2, 3 e 4)
+### B. VMs 2 e 3: Máquinas Validadoras (Validadores 2 e 3)
 * **Papel:** Participantes do comitê de validação do consenso QBFT.
 * **Execução:** Assinam e propõem blocos a cada 2 segundos.
-* **Segurança:** As portas JSON-RPC HTTP (`8545`) e WS (`8645`) ficam **fechadas/desabilitadas** nesses nós por padrão, protegendo a chave privada do validador contra ataques externos.
+* **Segurança:** As portas JSON-RPC externas ficam desabilitadas nesses nós por padrão, protegendo a chave privada do validador contra acessos indevidos.
 * **Portas Abertas:** `30303` TCP/UDP (P2P).
 
-### C. Máquina Gateway / RPC (Nó Membro)
-* **Papel:** Ponto de entrada e saída de dados para o mundo externo (API Node.js, Caliper, MetaMask, Blockscout).
+### C. VM 4: Máquina Gateway / RPC (Consultas e Transações)
+* **Papel:** Ponto de entrada e saída de dados para o mundo externo (API Node.js, Caliper, JMeter, MetaMask).
 * **Execução:** Não possui chave de validador (não assina blocos, apenas replica o estado da cadeia).
 * **Portas Abertas:**
   * `30303` TCP/UDP (P2P);
-  * `8545` TCP (JSON-RPC HTTP com CORS aberto `*` e APIs `ETH,NET,WEB3,QBFT,DEBUG`);
+  * `8545` TCP (JSON-RPC HTTP com CORS aberto `*` e APIs `ETH,NET,WEB3,QBFT,DEBUG,TXPOOL`);
   * `8645` TCP (WebSockets para escuta de eventos `RewardMinted` e `ResgateCriado`);
   * `9545` TCP (Métricas Prometheus, opcional).
 

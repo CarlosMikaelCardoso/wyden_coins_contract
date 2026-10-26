@@ -1,35 +1,35 @@
-# Infraestrutura de Rede Hyperledger Besu (Multi-Node QBFT)
+# Infraestrutura de Rede Hyperledger Besu (Multi-Node QBFT - 4 VMs)
 
-Módulo de implantação e orquestração da rede privada Ethereum/Besu para o projeto **WydenCoin**, para suporte nativo à execução distribuída em **múltiplas máquinas e nós independentes**.
+Módulo de implantação e orquestração da rede privada Ethereum/Besu para o projeto **WydenCoin**, configurado para suporte nativo à execução distribuída em **4 máquinas virtuais (VMs) independentes**, com base nas práticas do **Projeto Ilíada (RNP)**.
 
 ---
 
-## 🏛️ Visão Geral da Arquitetura
+## 🏛️ Visão Geral da Arquitetura (4 VMs)
 
-A rede utiliza o algoritmo de consenso bizantino **QBFT (Quorum Byzantine Fault Tolerance)** com tempo de bloco estipulado em **2 segundos**, política de taxa zero (`min-gas-price=0`), pré-financiamento da conta deployer e isolamento entre validadores e gateways de aplicação:
+A rede utiliza o algoritmo de consenso bizantino **QBFT (Quorum Byzantine Fault Tolerance)** com tempo de bloco estipulado em **2 segundos**, política de taxa zero (`min-gas-price=0`), pré-financiamento da conta deployer e isolamento entre validadores e gateway de aplicação:
 
 ```
                   +-----------------------------------+
-                  |      Máquina 1 (Coordenadora)     |
+                  |          VM 1 (Coordenadora)      |
                   |     Validador 1 / Bootnode QBFT   |
                   |      P2P Port: 30303 (TCP/UDP)    |
                   +-----------------+-----------------+
                                     |
           +-------------------------+-------------------------+
-          |                         |                         |
-          v                         v                         v
-+-------------------+     +-------------------+     +-------------------+
-|     Máquina 2     |     |     Máquina 3     |     |     Máquina 4     |
-|   Validador 2     |     |   Validador 3     |     |   Validador 4     |
-|   (Consenso QBFT) |     |   (Consenso QBFT) |     |   (Consenso QBFT) |
-+-------------------+     +-------------------+     +-------------------+
-          \                         |                         /
-           \                        |                        /
+          |                                                   |
+          v                                                   v
++-------------------+                               +-------------------+
+|       VM 2        |                               |       VM 3        |
+|   Validador 2     |<=============================>|   Validador 3     |
+|   (Consenso QBFT) |                               |   (Consenso QBFT) |
++-------------------+                               +-------------------+
+          \                                                   /
+           \                                                 /
             +-----------------------+-----------------------+
                                     |
                                     v
                   +-----------------------------------+
-                  |             Máquina 5             |
+                  |               VM 4                |
                   |       Gateway RPC / Consultas     |
                   |  HTTP 8545 | WS 8645 | Metrics 9545
                   |     (Caliper, JMeter, DApps)      |
@@ -45,8 +45,8 @@ Para mais detalhes, consulte: [arquitetura-multi-node.md](file:///home/mikael/Do
 ```bash
 rede/
 ├── configs/                      # Modelos declarativos e configurações base
-│   ├── genesis_QBFT.json         # Especificação do bloco gênese e consenso QBFT
-│   ├── network-topology.yaml.example # Exemplo de topologia multi-máquina
+│   ├── genesis_QBFT.json         # Bloco gênese (3 validadores QBFT, 2s block time)
+│   ├── network-topology.yaml.example # Topologia das 4 VMs
 │   └── permissions.template.toml # Modelo de permissões de nós e contas
 │
 ├── core/                         # Scripts centrais de geração de rede e empacotamento
@@ -54,9 +54,9 @@ rede/
 │   └── 02-package-nodes.sh       # Empacota bundles autônomos (.tar.gz) para cada VM
 │
 ├── deploy/                       # Orquestradores de implantação por máquina
-│   ├── setup-coordinator.sh      # Gera a rede e inicia o Nó 1 na Máquina 1
-│   ├── setup-validator.sh        # Inicializa um nó validador (Nós 2 a 4)
-│   └── setup-rpc.sh              # Inicializa o nó Gateway RPC
+│   ├── setup-coordinator.sh      # Gera a rede e inicia o Nó 1 na VM 1
+│   ├── setup-validator.sh        # Inicializa nós validadores (VM 2 e VM 3)
+│   └── setup-rpc.sh              # Inicializa o nó Gateway RPC (VM 4)
 │
 ├── docker/                       # Artefatos Docker padronizados
 │   ├── Dockerfile                # Imagem Besu baseada em hyperledger/besu:24.7.0
@@ -73,41 +73,39 @@ rede/
 │   └── stop-node.sh              # Parada e limpeza segura de contêineres
 │
 └── dist/                         # Diretório gerado contendo os pacotes prontos
-    ├── node1/                    # Executável na Máquina 1
-    ├── node2.tar.gz              # Pacote para Máquina 2
-    ├── node3.tar.gz              # Pacote para Máquina 3
-    ├── node4.tar.gz              # Pacote para Máquina 4
-    └── rpc-node.tar.gz           # Pacote para Máquina 5
+    ├── node1/                    # Executável na VM 1
+    ├── node2.tar.gz              # Pacote para VM 2
+    ├── node3.tar.gz              # Pacote para VM 3
+    └── rpc-node.tar.gz           # Pacote para VM 4
 ```
 
 ---
 
 ## 🚀 Guia Rápido de Uso
 
-### 1. Na Máquina 1 (Coordenadora / Bootnode)
+### 1. Na VM 1 (Coordenadora / Bootnode + Validador 1)
 
-Execute o orquestrador fornecendo o IP da Máquina 1:
+Execute o orquestrador fornecendo o IP da VM 1:
 ```bash
 ./deploy/setup-coordinator.sh --bootnode-ip 192.168.100.184
 ```
 
-Isso gera as chaves, o arquivo `genesis.json`, os pacotes em `dist/` e já sobe o Nó 1.
+Isso gera as chaves dos 3 validadores, o arquivo `genesis.json`, os pacotes em `dist/` e já sobe o Nó 1.
 
-### 2. Distribuir para as demais máquinas
+### 2. Distribuir para as demais máquinas via SCP
 
 ```bash
 scp dist/node2.tar.gz usuario@192.168.100.146:~/
 scp dist/node3.tar.gz usuario@192.168.100.142:~/
-scp dist/node4.tar.gz usuario@192.168.100.150:~/
 scp dist/rpc-node.tar.gz usuario@192.168.100.143:~/
 ```
 
-### 3. Nas Máquinas 2, 3 e 4 (Validadores)
+### 3. Nas VMs 2 e 3 (Validadores QBFT)
 ```bash
 tar -xzf nodeX.tar.gz && cd nodeX && ./run.sh
 ```
 
-### 4. Na Máquina 5 (Gateway RPC)
+### 4. Na VM 4 (Gateway RPC / Consultas / Caliper / JMeter)
 ```bash
 tar -xzf rpc-node.tar.gz && cd rpc-node && ./run.sh
 ```

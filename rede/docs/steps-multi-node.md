@@ -1,29 +1,28 @@
-# Guia de Operação da Rede Hyperledger Besu Multi-Node
+# Guia de Operação da Rede Hyperledger Besu Multi-Node (4 VMs)
 
-Este documento descreve o procedimento operacional passo a passo para inicializar e gerenciar a rede privada Hyperledger Besu (QBFT) em **múltiplas máquinas virtuais (VMs) ou servidores físicos independentes**, inspirado no modelo do Projeto **Ilíada (RNP)**.
+Este documento descreve o procedimento operacional passo a passo para inicializar e gerenciar a rede privada Hyperledger Besu (QBFT) em **4 máquinas virtuais (VMs) independentes**, inspirado no modelo do Projeto **Ilíada (RNP)**.
 
 ---
 
-## 1. Cenário e Topologia de Exemplo
+## 1. Cenário e Topologia da Rede (4 VMs)
 
-A rede é composta por 5 máquinas participantes:
+A rede é composta por 4 máquinas participantes:
 
 | Máquina | Papel na Rede | Host / IP Exemplo | Portas Expostas |
 | :--- | :--- | :--- | :--- |
 | **VM 1** | **Coordenador + Validador 1 (Bootnode)** | `192.168.100.184` | `30303` (P2P TCP/UDP), `8545` (RPC Local) |
-| **VM 2** | **Validador 2 (QBFT)** | `192.168.100.146` | `30303` (P2P TCP/UDP) |
-| **VM 3** | **Validador 3 (QBFT)** | `192.168.100.142` | `30303` (P2P TCP/UDP) |
-| **VM 4** | **Validador 4 (QBFT)** | `192.168.100.150` | `30303` (P2P TCP/UDP) |
-| **VM 5** | **Gateway RPC / Caliper / JMeter** | `192.168.100.143` | `30303` (P2P), `8545` (HTTP RPC), `8645` (WS) |
+| **VM 2** | **Validador 2 (QBFT)** | `192.168.100.146` | `30303` (P2P TCP/UDP), `8545` (RPC Local) |
+| **VM 3** | **Validador 3 (QBFT)** | `192.168.100.142` | `30303` (P2P TCP/UDP), `8545` (RPC Local) |
+| **VM 4** | **Gateway RPC / Consultas / Caliper / JMeter** | `192.168.100.143` | `30303` (P2P), `8545` (HTTP RPC Público), `8645` (WS) |
 
 > [!NOTE]
-> Os nós validadores 1 a 4 participam do algoritmo de consenso QBFT e produzem blocos a cada 2 segundos. O nó RPC (VM 5) atua exclusivamente como gateway de API para contratos inteligentes, testes de carga (Caliper/JMeter) e carteiras (MetaMask), mantendo a integridade e segurança dos nós validadores.
+> Os nós validadores 1 a 3 participam do algoritmo de consenso QBFT e produzem blocos a cada 2 segundos. O nó RPC (VM 4) atua exclusivamente como gateway de API para contratos inteligentes, testes de carga (Caliper/JMeter) e carteiras (MetaMask), mantendo a integridade e segurança dos nós validadores.
 
 ---
 
 ## 2. Pré-requisitos em Todas as Máquinas
 
-Em **cada uma das máquinas (VM1 a VM5)**, é necessário ter o Docker e Docker Compose instalados:
+Em **cada uma das 4 máquinas (VM 1 a VM 4)**, é necessário ter o Docker e Docker Compose instalados:
 
 ```bash
 # Caso o Docker não esteja instalado, utilize o utilitário fornecido:
@@ -38,7 +37,7 @@ Certifique-se de liberar o tráfego nas portas necessárias:
   sudo ufw allow 30303/tcp
   sudo ufw allow 30303/udp
   ```
-* **Na VM 5 (Gateway RPC)**:
+* **Na VM 4 (Gateway RPC)**:
   ```bash
   sudo ufw allow 8545/tcp
   sudo ufw allow 8645/tcp
@@ -46,9 +45,9 @@ Certifique-se de liberar o tráfego nas portas necessárias:
 
 ---
 
-## 3. Máquina 1 (Coordenadora / Bootnode)
+## 3. VM 1 (Coordenadora / Bootnode + Validador 1)
 
-A Máquina 1 é responsável por gerar as chaves criptográficas de todos os nós, o arquivo de bloco gênese (`genesis.json`), as listas de permissões e empacotar as configurações prontas para as demais máquinas.
+A VM 1 é responsável por gerar as chaves criptográficas de todos os nós, o arquivo de bloco gênese (`genesis.json`), as listas de permissões e empacotar as configurações prontas para as demais máquinas.
 
 ### Passo 1: Navegar até o diretório da rede
 ```bash
@@ -56,21 +55,20 @@ cd /home/mikael/Documentos/Codes/facicoin/rede
 ```
 
 ### Passo 2: Executar o Assistente de Inicialização do Coordenador
-Informe o IP público ou de rede local acessível da Máquina 1:
+Informe o IP público ou de rede local acessível da VM 1:
 
 ```bash
 ./deploy/setup-coordinator.sh --bootnode-ip 192.168.100.184
 ```
 
 O script realizará automaticamente:
-1. Geração das 4 chaves dos validadores via contêiner oficial do Besu (`hyperledger/besu:24.7.0`).
-2. Criação do `genesis.json` com QBFT configurado (2s block time, chainId 381660001, 0 gas).
+1. Geração das 3 chaves dos validadores via contêiner oficial do Besu (`hyperledger/besu:24.7.0`).
+2. Criação do `genesis.json` com QBFT configurado (2s block time, chainId 381660001, 0 gas, 3 validadores).
 3. Construção dos pacotes de distribuição em `rede/dist/`:
    * `dist/node1/` (inicializado localmente na VM 1).
    * `dist/node2.tar.gz` (para VM 2).
    * `dist/node3.tar.gz` (para VM 3).
-   * `dist/node4.tar.gz` (para VM 4).
-   * `dist/rpc-node.tar.gz` (para VM 5).
+   * `dist/rpc-node.tar.gz` (para VM 4).
 4. Inicialização em segundo plano do Validador 1 / Bootnode.
 
 ### Passo 3: Verificar o status do Nó 1
@@ -83,25 +81,22 @@ cd dist/node1
 
 ## 4. Distribuição dos Pacotes para as Outras Máquinas (SCP)
 
-Na **Máquina 1**, envie os arquivos compactados para cada máquina de destino via `scp`:
+Na **VM 1**, envie os arquivos compactados para cada máquina de destino via `scp`:
 
 ```bash
-# Para a Máquina 2 (Validador 2)
+# Para a VM 2 (Validador 2)
 scp dist/node2.tar.gz usuario@192.168.100.146:~/
 
-# Para a Máquina 3 (Validador 3)
+# Para a VM 3 (Validador 3)
 scp dist/node3.tar.gz usuario@192.168.100.142:~/
 
-# Para a Máquina 4 (Validador 4)
-scp dist/node4.tar.gz usuario@192.168.100.150:~/
-
-# Para a Máquina 5 (Gateway RPC / JMeter / Caliper)
+# Para a VM 4 (Gateway RPC / Consultas / JMeter / Caliper)
 scp dist/rpc-node.tar.gz usuario@192.168.100.143:~/
 ```
 
 ---
 
-## 5. Máquinas 2, 3 e 4 (Validadores QBFT)
+## 5. VM 2 e VM 3 (Validadores QBFT)
 
 Repita os seguintes comandos na VM de cada validador correspondente.
 
@@ -119,13 +114,6 @@ cd ~/node3
 ./run.sh
 ```
 
-### No Validador 4 (VM 4):
-```bash
-tar -xzf ~/node4.tar.gz
-cd ~/node4
-./run.sh
-```
-
 ### Como verificar se o validador está conectado e sincronizado:
 Em qualquer um dos nós, execute:
 ```bash
@@ -136,13 +124,13 @@ Ou acompanhe os logs em tempo real:
 docker compose logs -f
 ```
 
-Assim que 3 ou 4 validadores estiverem online (quorum bizantino $2F+1$), a rede iniciará a produção contínua de blocos QBFT!
+Com 2 ou 3 validadores online (maioria qualificada QBFT), a rede iniciará a produção contínua de blocos!
 
 ---
 
-## 6. Máquina 5 (Gateway RPC / Caliper / JMeter)
+## 6. VM 4 (Gateway RPC / Consultas / Caliper / JMeter)
 
-Acesse a Máquina 5 para colocar o nó de consulta e transações no ar:
+Acesse a VM 4 para colocar o nó de consulta e transações no ar:
 
 ```bash
 tar -xzf ~/rpc-node.tar.gz
@@ -182,5 +170,5 @@ Cada pacote gerado possui scripts padronizados:
 ### Resetar a rede do zero (apenas quando necessário):
 Se for necessário recriar toda a rede:
 1. Em todas as máquinas, execute `./stop.sh && rm -rf data/DATABASE/`.
-2. Na Máquina 1, execute novamente `./deploy/setup-coordinator.sh --bootnode-ip <IP_VM1>`.
-3. Reenvie os arquivos `.tar.gz` para as máquinas 2 a 5.
+2. Na VM 1, execute novamente `./deploy/setup-coordinator.sh --bootnode-ip <IP_VM1>`.
+3. Reenvie os arquivos `.tar.gz` para as VMs 2, 3 e 4.

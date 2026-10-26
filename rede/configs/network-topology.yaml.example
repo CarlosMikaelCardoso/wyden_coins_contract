@@ -10,54 +10,44 @@ network:
   blockPeriodSeconds: 2
   minGasPrice: 0
 
-# Definição das máquinas e nós participantes da rede
+# Definição das máquinas e nós participantes da rede (Arquitetura 4 VMs)
 nodes:
-  # Máquina 1: Coordenadora, Bootnode e Primeiro Validador
+  # VM 1: Coordenadora, Bootnode e Primeiro Validador QBFT
   - id: "node1"
     role: "validator"
     bootnode: true
     name: "Validator-1 (Bootnode)"
-    ip: "192.168.100.184"       # Ajuste para o IP real da Máquina 1
+    ip: "192.168.100.184"       # Ajuste para o IP real da VM 1
     p2pPort: 30303
     rpcHttp: false              # Validador não precisa expor RPC público
     wsEnabled: false
 
-  # Máquina 2: Segundo Validador QBFT
+  # VM 2: Segundo Validador QBFT
   - id: "node2"
     role: "validator"
     bootnode: false
     name: "Validator-2"
-    ip: "192.168.100.146"       # Ajuste para o IP real da Máquina 2
+    ip: "192.168.100.146"       # Ajuste para o IP real da VM 2
     p2pPort: 30303
     rpcHttp: false
     wsEnabled: false
 
-  # Máquina 3: Terceiro Validador QBFT
+  # VM 3: Terceiro Validador QBFT
   - id: "node3"
     role: "validator"
     bootnode: false
     name: "Validator-3"
-    ip: "192.168.100.142"       # Ajuste para o IP real da Máquina 3
+    ip: "192.168.100.142"       # Ajuste para o IP real da VM 3
     p2pPort: 30303
     rpcHttp: false
     wsEnabled: false
 
-  # Máquina 4: Quarto Validador QBFT
-  - id: "node4"
-    role: "validator"
-    bootnode: false
-    name: "Validator-4"
-    ip: "192.168.100.150"       # Ajuste para o IP real da Máquina 4
-    p2pPort: 30303
-    rpcHttp: false
-    wsEnabled: false
-
-  # Máquina 5: Nó RPC / Gateway para API, Caliper e MetaMask
+  # VM 4: Nó RPC / Gateway para API, Caliper, JMeter e MetaMask
   - id: "rpcnode"
     role: "rpc"
     bootnode: false
     name: "RPC-Gateway"
-    ip: "192.168.100.143"       # Ajuste para o IP da Máquina RPC (ex: JMeter)
+    ip: "192.168.100.143"       # Ajuste para o IP real da VM 4 (ex: JMeter)
     p2pPort: 30303
     rpcHttp: true
     rpcHttpPort: 8545

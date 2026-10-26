@@ -108,8 +108,11 @@ EOF
   chmod +x "${target_dir}/check.sh"
 }
 
-# 1. Empacotar Validadores 1 a 4
-for i in {1..4}; do
+# 1. Empacotar Validadores
+VALIDATOR_COUNT=$(ls -d "${BUILD_DIR}/nodes/node"* 2>/dev/null | wc -l)
+echo "Identificados ${VALIDATOR_COUNT} nós validadores para empacotamento."
+
+for i in $(seq 1 "${VALIDATOR_COUNT}"); do
   NODE_NAME="node${i}"
   NODE_PKG_DIR="${DIST_DIR}/${NODE_NAME}"
   mkdir -p "${NODE_PKG_DIR}/data"
@@ -135,7 +138,7 @@ BESU_ARGS=--data-path=/opt/besu/data --genesis-file=/opt/besu/genesis.json --p2p
 EOF
     write_helper_scripts "${NODE_PKG_DIR}" "Validador 1 (Bootnode)" "8545"
   else
-    # Nodes 2, 3 e 4 conectam ao Bootnode
+    # Demais nós conectam ao Bootnode
     cat <<EOF > "${NODE_PKG_DIR}/.env"
 NODE_NAME=besu-${NODE_NAME}
 BESU_IMAGE=hyperledger/besu:24.7.0
@@ -174,33 +177,33 @@ echo "📦 Criado pacote para: rpc-node"
 
 # 3. Gerar README de instruções de distribuição
 cat <<EOF > "${DIST_DIR}/README.md"
-# Pacotes de Distribuição da Rede Besu
+# Pacotes de Distribuição da Rede Besu (4 VMs)
 
 Os pacotes prontos para cada máquina foram gerados em: \`${DIST_DIR}\`.
 
-### 1. Máquina 1 (Coordenadora / Bootnode)
+### 1. VM 1 (Coordenadora / Bootnode + Validador 1)
 * Já está configurada na pasta local: \`dist/node1\`
 * Para iniciar:
   \`\`\`bash
   cd dist/node1 && ./run.sh
   \`\`\`
 
-### 2. Máquinas 2, 3 e 4 (Validadores)
+### 2. VM 2 e VM 3 (Validadores QBFT)
 * Copie o arquivo tar correspondente para a máquina de destino:
   \`\`\`bash
   scp dist/node2.tar.gz usuario@IP_VM2:~/
   scp dist/node3.tar.gz usuario@IP_VM3:~/
-  scp dist/node4.tar.gz usuario@IP_VM4:~/
   \`\`\`
 * Na máquina de destino:
   \`\`\`bash
   tar -xzf node2.tar.gz && cd node2 && ./run.sh
+  tar -xzf node3.tar.gz && cd node3 && ./run.sh
   \`\`\`
 
-### 3. Máquina 5 (Nó RPC / Backend / Caliper)
+### 3. VM 4 (Nó RPC / Consultas / Caliper / JMeter)
 * Copie o pacote RPC:
   \`\`\`bash
-  scp dist/rpc-node.tar.gz usuario@IP_RPC:~/
+  scp dist/rpc-node.tar.gz usuario@IP_VM4:~/
   \`\`\`
 * Na máquina de destino:
   \`\`\`bash
