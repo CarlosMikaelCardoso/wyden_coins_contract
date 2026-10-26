@@ -3,8 +3,30 @@
 # check-node.sh
 # Utilitário para verificar a saúde, peers e bloco atual de um nó Besu via JSON-RPC.
 # ==============================================================================
-RPC_PORT="${1:-8545}"
-RPC_HOST="${2:-127.0.0.1}"
+RPC_PORT="8545"
+RPC_HOST="127.0.0.1"
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -p|--port)
+      RPC_PORT="$2"
+      shift 2
+      ;;
+    -h|--host)
+      RPC_HOST="$2"
+      shift 2
+      ;;
+    *)
+      if [[ "$1" =~ ^[0-9]+$ ]]; then
+        RPC_PORT="$1"
+        shift
+      else
+        shift
+      fi
+      ;;
+  esac
+done
+
 RPC_URL="http://${RPC_HOST}:${RPC_PORT}"
 
 echo "================================================================="

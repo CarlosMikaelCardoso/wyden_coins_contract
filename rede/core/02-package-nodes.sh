@@ -22,10 +22,25 @@ fi
 BOOTNODE_ENODE=$(cat "${BUILD_DIR}/bootnode.enode")
 BOOTNODE_IP=$(echo "${BOOTNODE_ENODE}" | sed -n 's/.*@\([^:]*\):.*/\1/p')
 
+SINGLE_MACHINE=false
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --single-machine|--local|-l)
+      SINGLE_MACHINE=true
+      shift
+      ;;
+    *)
+      shift
+      ;;
+  esac
+done
+
 echo "================================================================="
 echo "   EMPACOTAMENTO DOS NÓS HYPERLEDGER BESU PARA MULTI-MÁQUINAS   "
 echo "================================================================="
 echo "Bootnode Enode : ${BOOTNODE_ENODE}"
+echo "Modo           : $( [[ "${SINGLE_MACHINE}" == "true" ]] && echo "Single Machine (Validação Local com Portas Incrementais)" || echo "Multi-VMs (Portas Padrão 30303/8545 por Máquina)" )"
 echo "Destino        : ${DIST_DIR}"
 echo "-----------------------------------------------------------------"
 
@@ -117,6 +132,15 @@ for i in $(seq 1 "${VALIDATOR_COUNT}"); do
   NODE_PKG_DIR="${DIST_DIR}/${NODE_NAME}"
   mkdir -p "${NODE_PKG_DIR}/data"
 
+  # Determinar portas com base no modo de implantação
+  if [[ "${SINGLE_MACHINE}" == "true" ]]; then
+    CURRENT_P2P_PORT=$(( 30303 + i - 1 )) # 30303, 30304, 30305
+    CURRENT_RPC_PORT=$(( 8540 + i ))       # 8541, 8542, 8543
+  else
+    CURRENT_P2P_PORT=30303
+    CURRENT_RPC_PORT=8545
+  fi
+
   # Copiar arquivos comuns
   cp "${BUILD_DIR}/genesis.json" "${NODE_PKG_DIR}/genesis.json"
   cp "${BUILD_DIR}/permissions_config.toml" "${NODE_PKG_DIR}/permissions_config.toml"
@@ -133,31 +157,43 @@ for i in $(seq 1 "${VALIDATOR_COUNT}"); do
 NODE_NAME=besu-${NODE_NAME}
 BESU_IMAGE=hyperledger/besu:24.7.0
 BESU_LOGGING=INFO
-P2P_PORT=30303
-BESU_ARGS=--data-path=/opt/besu/data --genesis-file=/opt/besu/genesis.json --p2p-port=30303 --p2p-host=${BOOTNODE_IP} --min-gas-price=0 --data-storage-format=BONSAI --profile=ENTERPRISE --permissions-accounts-config-file=/opt/besu/permissions_config.toml --permissions-accounts-config-file-enabled=true --rpc-http-enabled=true --rpc-http-host=127.0.0.1 --rpc-http-port=8545 --rpc-http-api=ETH,NET,WEB3,QBFT
+P2P_PORT=${CURRENT_P2P_PORT}
+BESU_ARGS=--data-path=/opt/besu/data --genesis-file=/opt/besu/genesis.json --p2p-port=${CURRENT_P2P_PORT} --p2p-host=${BOOTNODE_IP} --min-gas-price=0 --data-storage-format=BONSAI --profile=ENTERPRISE --permissions-accounts-config-file=/opt/besu/permissions_config.toml --permissions-accounts-config-file-enabled=true --rpc-http-enabled=true --rpc-http-host=127.0.0.1 --rpc-http-port=${CURRENT_RPC_PORT} --rpc-http-api=ETH,NET,WEB3,QBFT
 EOF
-    write_helper_scripts "${NODE_PKG_DIR}" "Validador 1 (Bootnode)" "8545"
+    write_helper_scripts "${NODE_PKG_DIR}" "Validador 1 (Bootnode)" "${CURRENT_RPC_PORT}"
   else
     # Demais nós conectam ao Bootnode
     cat <<EOF > "${NODE_PKG_DIR}/.env"
 NODE_NAME=besu-${NODE_NAME}
 BESU_IMAGE=hyperledger/besu:24.7.0
 BESU_LOGGING=INFO
-P2P_PORT=30303
-BESU_ARGS=--data-path=/opt/besu/data --genesis-file=/opt/besu/genesis.json --p2p-port=30303 --bootnodes=${BOOTNODE_ENODE} --min-gas-price=0 --data-storage-format=BONSAI --profile=ENTERPRISE --permissions-accounts-config-file=/opt/besu/permissions_config.toml --permissions-accounts-config-file-enabled=true --rpc-http-enabled=true --rpc-http-host=127.0.0.1 --rpc-http-port=8545 --rpc-http-api=ETH,NET,WEB3,QBFT
+P2P_PORT=${CURRENT_P2P_PORT}
+BESU_ARGS=--data-path=/opt/besu/data --genesis-file=/opt/besu/genesis.json --p2p-port=${CURRENT_P2P_PORT} --bootnodes=${BOOTNODE_ENODE} --min-gas-price=0 --data-storage-format=BONSAI --profile=ENTERPRISE --permissions-accounts-config-file=/opt/besu/permissions_config.toml --permissions-accounts-config-file-enabled=true --rpc-http-enabled=true --rpc-http-host=127.0.0.1 --rpc-http-port=${CURRENT_RPC_PORT} --rpc-http-api=ETH,NET,WEB3,QBFT
 EOF
-    write_helper_scripts "${NODE_PKG_DIR}" "Validador ${i}" "8545"
+    write_helper_scripts "${NODE_PKG_DIR}" "Validador ${i}" "${CURRENT_RPC_PORT}"
     
     # Criar tar.gz para envio fácil
     tar -czf "${DIST_DIR}/${NODE_NAME}.tar.gz" -C "${DIST_DIR}" "${NODE_NAME}"
   fi
 
-  echo "📦 Criado pacote para: ${NODE_NAME}"
+  echo "📦 Criado pacote para: ${NODE_NAME} (P2P: ${CURRENT_P2P_PORT}, RPC: ${CURRENT_RPC_PORT})"
 done
 
 # 2. Empacotar Nó RPC / Gateway (Sem chaves de validador, apenas sincroniza e expõe APIs)
 RPC_PKG_DIR="${DIST_DIR}/rpc-node"
 mkdir -p "${RPC_PKG_DIR}/data"
+
+if [[ "${SINGLE_MACHINE}" == "true" ]]; then
+  RPC_P2P_PORT=30306
+  RPC_HTTP_PORT=8545 # Porta RPC principal para Caliper, JMeter e DApps
+  RPC_WS_PORT=8645
+  RPC_METRICS_PORT=9545
+else
+  RPC_P2P_PORT=30303
+  RPC_HTTP_PORT=8545
+  RPC_WS_PORT=8645
+  RPC_METRICS_PORT=9545
+fi
 
 cp "${BUILD_DIR}/genesis.json" "${RPC_PKG_DIR}/genesis.json"
 cp "${BUILD_DIR}/permissions_config.toml" "${RPC_PKG_DIR}/permissions_config.toml"
@@ -167,13 +203,13 @@ cat <<EOF > "${RPC_PKG_DIR}/.env"
 NODE_NAME=besu-rpcnode
 BESU_IMAGE=hyperledger/besu:24.7.0
 BESU_LOGGING=INFO
-P2P_PORT=30303
-BESU_ARGS=--data-path=/opt/besu/data --genesis-file=/opt/besu/genesis.json --p2p-port=30303 --bootnodes=${BOOTNODE_ENODE} --min-gas-price=0 --data-storage-format=BONSAI --profile=ENTERPRISE --permissions-accounts-config-file=/opt/besu/permissions_config.toml --permissions-accounts-config-file-enabled=true --rpc-http-enabled=true --rpc-http-host=0.0.0.0 --rpc-http-port=8545 --rpc-http-api=ETH,NET,WEB3,QBFT,DEBUG,TXPOOL --rpc-http-cors-origins="*" --rpc-ws-enabled=true --rpc-ws-host=0.0.0.0 --rpc-ws-port=8645 --rpc-ws-api=ETH,NET,WEB3,QBFT --metrics-enabled=true --metrics-port=9545
+P2P_PORT=${RPC_P2P_PORT}
+BESU_ARGS=--data-path=/opt/besu/data --genesis-file=/opt/besu/genesis.json --p2p-port=${RPC_P2P_PORT} --bootnodes=${BOOTNODE_ENODE} --min-gas-price=0 --data-storage-format=BONSAI --profile=ENTERPRISE --permissions-accounts-config-file=/opt/besu/permissions_config.toml --permissions-accounts-config-file-enabled=true --rpc-http-enabled=true --rpc-http-host=0.0.0.0 --rpc-http-port=${RPC_HTTP_PORT} --rpc-http-api=ETH,NET,WEB3,QBFT,DEBUG,TXPOOL --rpc-http-cors-origins="*" --rpc-ws-enabled=true --rpc-ws-host=0.0.0.0 --rpc-ws-port=${RPC_WS_PORT} --rpc-ws-api=ETH,NET,WEB3,QBFT --metrics-enabled=true --metrics-port=${RPC_METRICS_PORT}
 EOF
 
-write_helper_scripts "${RPC_PKG_DIR}" "Nó RPC / Gateway" "8545"
+write_helper_scripts "${RPC_PKG_DIR}" "Nó RPC / Gateway" "${RPC_HTTP_PORT}"
 tar -czf "${DIST_DIR}/rpc-node.tar.gz" -C "${DIST_DIR}" "rpc-node"
-echo "📦 Criado pacote para: rpc-node"
+echo "📦 Criado pacote para: rpc-node (P2P: ${RPC_P2P_PORT}, RPC: ${RPC_HTTP_PORT})"
 
 # 3. Gerar README de instruções de distribuição
 cat <<EOF > "${DIST_DIR}/README.md"
