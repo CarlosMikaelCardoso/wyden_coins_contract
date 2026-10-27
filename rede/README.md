@@ -1,6 +1,6 @@
 # Infraestrutura de Rede Hyperledger Besu (Multi-Node QBFT - 4 VMs)
 
-Módulo de implantação e orquestração da rede privada Ethereum/Besu para o projeto **WydenCoin**, configurado para suporte nativo à execução distribuída em **4 máquinas virtuais (VMs) independentes**, com base nas práticas do **Projeto Ilíada (RNP)**.
+Módulo de implantação e orquestração da rede privada Ethereum/Besu para o projeto **WydenCoin**, configurado para suporte nativo à execução distribuída em **4 máquinas virtuais (VMs) independentes**.
 
 ---
 

@@ -1,6 +1,6 @@
 # Guia de Operação da Rede Hyperledger Besu Multi-Node (4 VMs)
 
-Este documento descreve o procedimento operacional passo a passo para inicializar e gerenciar a rede privada Hyperledger Besu (QBFT) em **4 máquinas virtuais (VMs) independentes**, inspirado no modelo do Projeto **Ilíada (RNP)**.
+Este documento descreve o procedimento operacional passo a passo para inicializar e gerenciar a rede privada Hyperledger Besu (QBFT) em **4 máquinas virtuais (VMs) independentes**.
 
 ---
 

@@ -1,6 +1,6 @@
 # Arquitetura da Rede Hyperledger Besu Multi-Node (WydenCoin)
 
-Este documento detalha o desenho de arquitetura de rede distribuída entre **4 máquinas virtuais (VMs)** distintas, inspirado nas melhores práticas desenvolvidas pelo projeto **Ilíada (RNP)** no repositório `cenarios-bevel`.
+Este documento detalha o desenho de arquitetura de rede distribuída entre **4 máquinas virtuais (VMs)** distintas.
 
 ---
 

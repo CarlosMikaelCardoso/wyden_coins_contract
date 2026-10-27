@@ -1,6 +1,5 @@
 # ==============================================================================
 # Topologia da Rede Hyperledger Besu Multi-Node (WydenCoin)
-# Inspirado no modelo de configuração do Projeto Ilíada (RNP)
 # ==============================================================================
 
 network:
