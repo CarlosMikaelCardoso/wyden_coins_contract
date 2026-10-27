@@ -10,10 +10,10 @@ A rede é composta por 4 máquinas participantes:
 
 | Máquina | Papel na Rede | Host / IP Exemplo | Portas Expostas |
 | :--- | :--- | :--- | :--- |
-| **VM 1** | **Coordenador + Validador 1 (Bootnode)** | `192.168.100.184` | `30303` (P2P TCP/UDP), `8545` (RPC Local) |
-| **VM 2** | **Validador 2 (QBFT)** | `192.168.100.146` | `30303` (P2P TCP/UDP), `8545` (RPC Local) |
-| **VM 3** | **Validador 3 (QBFT)** | `192.168.100.142` | `30303` (P2P TCP/UDP), `8545` (RPC Local) |
-| **VM 4** | **Gateway RPC / Consultas / Caliper / JMeter** | `192.168.100.143` | `30303` (P2P), `8545` (HTTP RPC Público), `8645` (WS) |
+| **VM 1** | **Coordenador + Validador 1 (Bootnode)** | `<node1-ip>` | `30303` (P2P TCP/UDP), `8545` (RPC Local) |
+| **VM 2** | **Validador 2 (QBFT)** | `<node2-ip>` | `30303` (P2P TCP/UDP), `8545` (RPC Local) |
+| **VM 3** | **Validador 3 (QBFT)** | `<node3-ip>` | `30303` (P2P TCP/UDP), `8545` (RPC Local) |
+| **VM 4** | **Gateway RPC / Consultas / Caliper / JMeter** | `<node4-ip>` | `30303` (P2P), `8545` (HTTP RPC Público), `8645` (WS) |
 
 > [!NOTE]
 > Os nós validadores 1 a 3 participam do algoritmo de consenso QBFT e produzem blocos a cada 2 segundos. O nó RPC (VM 4) atua exclusivamente como gateway de API para contratos inteligentes, testes de carga (Caliper/JMeter) e carteiras (MetaMask), mantendo a integridade e segurança dos nós validadores.
@@ -58,7 +58,7 @@ cd /home/mikael/Documentos/Codes/facicoin/rede
 Informe o IP público ou de rede local acessível da VM 1:
 
 ```bash
-./deploy/setup-coordinator.sh --bootnode-ip 192.168.100.184
+./deploy/setup-coordinator.sh --bootnode-ip <node1-ip>
 ```
 
 O script realizará automaticamente:
@@ -85,13 +85,13 @@ Na **VM 1**, envie os arquivos compactados para cada máquina de destino via `sc
 
 ```bash
 # Para a VM 2 (Validador 2)
-scp dist/node2.tar.gz usuario@192.168.100.146:~/
+scp dist/node2.tar.gz usuario@<node2-ip>:~/
 
 # Para a VM 3 (Validador 3)
-scp dist/node3.tar.gz usuario@192.168.100.142:~/
+scp dist/node3.tar.gz usuario@<node3-ip>:~/
 
 # Para a VM 4 (Gateway RPC / Consultas / JMeter / Caliper)
-scp dist/rpc-node.tar.gz usuario@192.168.100.143:~/
+scp dist/rpc-node.tar.gz usuario@<rpc-ip>:~/
 ```
 
 ---
@@ -141,7 +141,7 @@ cd ~/rpc-node
 ### Testar a conectividade RPC a partir de qualquer computador:
 ```bash
 curl -s -X POST --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
-  -H "Content-Type: application/json" http://192.168.100.143:8545
+  -H "Content-Type: application/json" http://<rpc-ip>:8545
 ```
 Resposta esperada (bloco em hexadecimal):
 ```json
@@ -151,7 +151,7 @@ Resposta esperada (bloco em hexadecimal):
 Para consultar a lista de validadores ativos no bloco atual:
 ```bash
 curl -s -X POST --data '{"jsonrpc":"2.0","method":"qbft_getValidatorsByBlockNumber","params":["latest"],"id":1}' \
-  -H "Content-Type: application/json" http://192.168.100.143:8545
+  -H "Content-Type: application/json" http://<rpc-ip>:8545
 ```
 
 ---

@@ -81,7 +81,7 @@ rede/
 
 ---
 
-## 🚀 Guia Rápido de Uso
+## Guia Rápido de Uso
 
 ### 1. Na VM 1 (Coordenadora / Bootnode + Validador 1)
 
