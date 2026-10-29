@@ -36,7 +36,16 @@ A rede utiliza o algoritmo de consenso bizantino **QBFT (Quorum Byzantine Fault 
                   +-----------------------------------+
 ```
 
-Para mais detalhes, consulte: [arquitetura-multi-node.md](file:///home/mikael/Documentos/Codes/facicoin/rede/docs/arquitetura-multi-node.md).
+Para mais detalhes sobre o desenho da rede, consulte: [arquitetura-multi-node.md](file:///home/mikael/Documentos/Codes/facicoin/rede/docs/arquitetura-multi-node.md).
+
+---
+
+## 📚 Guias Manuais de Instalação (Sem Scripts .sh)
+
+Para desenvolvedores, pesquisadores e operadores que desejam ter controle manual absoluto sobre a infraestrutura e compreender cada comando executado nos bastidores, consulte os tutoriais detalhados:
+
+* 🖥️ **[lab-single-node/README.md](file:///home/mikael/Documentos/Codes/facicoin/rede/lab-single-node/README.md)**: Guia completo para subir 4 nós em **máquina única** usando comandos `docker run` manuais, mapeamento de portas locais e geração criptográfica passo a passo.
+* 🌐 **[lab-multi-node/README.md](file:///home/mikael/Documentos/Codes/facicoin/rede/lab-multi-node/README.md)**: Guia completo para implantar a rede em **4 VMs distribuídas** usando comandos `docker run` manuais, configuração de bootnode externo, transferência via `scp` e placeholders padronizados (`<ip-vm1>`, `<ip-vm2>`, etc.).
 
 ---
 
@@ -44,6 +53,12 @@ Para mais detalhes, consulte: [arquitetura-multi-node.md](file:///home/mikael/Do
 
 ```bash
 rede/
+├── lab-single-node/              # Tutorial de instalação manual em máquina única (sem .sh)
+│   └── README.md
+│
+├── lab-multi-node/               # Tutorial de instalação manual em 4 VMs (sem .sh)
+│   └── README.md
+│
 ├── configs/                      # Modelos declarativos e configurações base
 │   ├── genesis_QBFT.json         # Bloco gênese (3 validadores QBFT, 2s block time)
 │   ├── network-topology.yaml.example # Topologia das 4 VMs
@@ -56,7 +71,8 @@ rede/
 ├── deploy/                       # Orquestradores de implantação por máquina
 │   ├── setup-coordinator.sh      # Gera a rede e inicia o Nó 1 na VM 1
 │   ├── setup-validator.sh        # Inicializa nós validadores (VM 2 e VM 3)
-│   └── setup-rpc.sh              # Inicializa o nó Gateway RPC (VM 4)
+│   ├── setup-rpc.sh              # Inicializa o nó Gateway RPC (VM 4)
+│   └── test-single-machine.sh    # Validação automática da rede em máquina única
 │
 ├── docker/                       # Artefatos Docker padronizados
 │   ├── Dockerfile                # Imagem Besu baseada em hyperledger/besu:24.7.0
@@ -65,7 +81,7 @@ rede/
 │
 ├── docs/                         # Documentação técnica e operacional
 │   ├── arquitetura-multi-node.md # Topologia, portas de firewall e funções
-│   └── steps-multi-node.md       # Guia operacional passo a passo completo
+│   └── steps-multi-node.md       # Guia operacional passo a passo com scripts
 │
 ├── scripts/                      # Utilitários de apoio
 │   ├── check-node.sh             # Diagnóstico de saúde, peers e bloco
@@ -87,7 +103,7 @@ rede/
 
 Execute o orquestrador fornecendo o IP da VM 1:
 ```bash
-./deploy/setup-coordinator.sh --bootnode-ip 192.168.100.184
+./deploy/setup-coordinator.sh --bootnode-ip <ip-vm1>
 ```
 
 Isso gera as chaves dos 3 validadores, o arquivo `genesis.json`, os pacotes em `dist/` e já sobe o Nó 1.
@@ -95,9 +111,9 @@ Isso gera as chaves dos 3 validadores, o arquivo `genesis.json`, os pacotes em `
 ### 2. Distribuir para as demais máquinas via SCP
 
 ```bash
-scp dist/node2.tar.gz usuario@192.168.100.146:~/
-scp dist/node3.tar.gz usuario@192.168.100.142:~/
-scp dist/rpc-node.tar.gz usuario@192.168.100.143:~/
+scp dist/node2.tar.gz <usuario>@<ip-vm2>:~/
+scp dist/node3.tar.gz <usuario>@<ip-vm3>:~/
+scp dist/rpc-node.tar.gz <usuario>@<ip-vm4>:~/
 ```
 
 ### 3. Nas VMs 2 e 3 (Validadores QBFT)

@@ -227,8 +227,8 @@ Os pacotes prontos para cada máquina foram gerados em: \`${DIST_DIR}\`.
 ### 2. VM 2 e VM 3 (Validadores QBFT)
 * Copie o arquivo tar correspondente para a máquina de destino:
   \`\`\`bash
-  scp dist/node2.tar.gz usuario@IP_VM2:~/
-  scp dist/node3.tar.gz usuario@IP_VM3:~/
+  scp dist/node2.tar.gz <usuario>@<ip-vm2>:~/
+  scp dist/node3.tar.gz <usuario>@<ip-vm3>:~/
   \`\`\`
 * Na máquina de destino:
   \`\`\`bash
@@ -239,7 +239,7 @@ Os pacotes prontos para cada máquina foram gerados em: \`${DIST_DIR}\`.
 ### 3. VM 4 (Nó RPC / Consultas / Caliper / JMeter)
 * Copie o pacote RPC:
   \`\`\`bash
-  scp dist/rpc-node.tar.gz usuario@IP_VM4:~/
+  scp dist/rpc-node.tar.gz <usuario>@<ip-vm4>:~/
   \`\`\`
 * Na máquina de destino:
   \`\`\`bash

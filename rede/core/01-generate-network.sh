@@ -25,7 +25,7 @@ Opções:
   -h, --help                 Exibe esta mensagem de ajuda.
 
 Exemplo:
-  $(basename "${0}") --bootnode-ip 192.168.100.184
+  $(basename "${0}") --bootnode-ip <ip-bootnode>
 EOF
 }
 

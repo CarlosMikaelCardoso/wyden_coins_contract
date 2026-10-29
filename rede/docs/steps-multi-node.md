@@ -1,6 +1,6 @@
 # Guia de Operação da Rede Hyperledger Besu Multi-Node (4 VMs)
 
-Este documento descreve o procedimento operacional passo a passo para inicializar e gerenciar a rede privada Hyperledger Besu (QBFT) em **4 máquinas virtuais (VMs) independentes**.
+Este documento descreve o procedimento operacional passo a passo para inicializar e gerenciar a rede privada Hyperledger Besu (QBFT) em **4 máquinas virtuais (VMs) independentes**, inspirado no modelo do Projeto **Ilíada (RNP)**.
 
 ---
 
@@ -13,7 +13,10 @@ A rede é composta por 4 máquinas participantes:
 | **VM 1** | **Coordenador + Validador 1 (Bootnode)** | `<node1-ip>` | `30303` (P2P TCP/UDP), `8545` (RPC Local) |
 | **VM 2** | **Validador 2 (QBFT)** | `<node2-ip>` | `30303` (P2P TCP/UDP), `8545` (RPC Local) |
 | **VM 3** | **Validador 3 (QBFT)** | `<node3-ip>` | `30303` (P2P TCP/UDP), `8545` (RPC Local) |
-| **VM 4** | **Gateway RPC / Consultas / Caliper / JMeter** | `<node4-ip>` | `30303` (P2P), `8545` (HTTP RPC Público), `8645` (WS) |
+| **VM 4** | **Gateway RPC / Consultas / Caliper / JMeter** | `<rpc-ip>` | `30303` (P2P), `8545` (HTTP RPC Público), `8645` (WS) |
+
+> [!TIP]
+> Substitua os placeholders `<node1-ip>`, `<node2-ip>`, `<node3-ip>`, `<rpc-ip>` e `<usuario>` pelos valores reais do seu laboratório utilizando o recurso de buscar e substituir (**Ctrl + F**).
 
 > [!NOTE]
 > Os nós validadores 1 a 3 participam do algoritmo de consenso QBFT e produzem blocos a cada 2 segundos. O nó RPC (VM 4) atua exclusivamente como gateway de API para contratos inteligentes, testes de carga (Caliper/JMeter) e carteiras (MetaMask), mantendo a integridade e segurança dos nós validadores.
@@ -85,13 +88,13 @@ Na **VM 1**, envie os arquivos compactados para cada máquina de destino via `sc
 
 ```bash
 # Para a VM 2 (Validador 2)
-scp dist/node2.tar.gz usuario@<node2-ip>:~/
+scp dist/node2.tar.gz <usuario>@<node2-ip>:~/
 
 # Para a VM 3 (Validador 3)
-scp dist/node3.tar.gz usuario@<node3-ip>:~/
+scp dist/node3.tar.gz <usuario>@<node3-ip>:~/
 
 # Para a VM 4 (Gateway RPC / Consultas / JMeter / Caliper)
-scp dist/rpc-node.tar.gz usuario@<rpc-ip>:~/
+scp dist/rpc-node.tar.gz <usuario>@<rpc-ip>:~/
 ```
 
 ---
@@ -170,5 +173,5 @@ Cada pacote gerado possui scripts padronizados:
 ### Resetar a rede do zero (apenas quando necessário):
 Se for necessário recriar toda a rede:
 1. Em todas as máquinas, execute `./stop.sh && rm -rf data/DATABASE/`.
-2. Na VM 1, execute novamente `./deploy/setup-coordinator.sh --bootnode-ip <IP_VM1>`.
+2. Na VM 1, execute novamente `./deploy/setup-coordinator.sh --bootnode-ip <node1-ip>`.
 3. Reenvie os arquivos `.tar.gz` para as VMs 2, 3 e 4.
