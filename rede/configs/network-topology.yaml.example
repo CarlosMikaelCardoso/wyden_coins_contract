@@ -10,14 +10,14 @@ network:
   minGasPrice: 0
 
 # Definição das máquinas e nós participantes da rede (Arquitetura 4 VMs)
-# Dica: Substitua <ip-vm1>, <ip-vm2>, <ip-vm3> e <ip-vm4> pelos IPs reais usando Ctrl+F
+# Dica: Substitua <node1-ip>, <node2-ip>, <node3-ip> e <rpc-ip> pelos IPs reais usando Ctrl+F
 nodes:
   # VM 1: Coordenadora, Bootnode e Primeiro Validador QBFT
   - id: "node1"
     role: "validator"
     bootnode: true
     name: "Validator-1 (Bootnode)"
-    ip: "<ip-vm1>"              # Substitua pelo IP real da VM 1
+    ip: "<node1-ip>"            # Substitua pelo IP real da VM 1
     p2pPort: 30303
     rpcHttp: false              # Validador não precisa expor RPC público
     wsEnabled: false
@@ -27,7 +27,7 @@ nodes:
     role: "validator"
     bootnode: false
     name: "Validator-2"
-    ip: "<ip-vm2>"              # Substitua pelo IP real da VM 2
+    ip: "<node2-ip>"            # Substitua pelo IP real da VM 2
     p2pPort: 30303
     rpcHttp: false
     wsEnabled: false
@@ -37,7 +37,7 @@ nodes:
     role: "validator"
     bootnode: false
     name: "Validator-3"
-    ip: "<ip-vm3>"              # Substitua pelo IP real da VM 3
+    ip: "<node3-ip>"            # Substitua pelo IP real da VM 3
     p2pPort: 30303
     rpcHttp: false
     wsEnabled: false
@@ -47,7 +47,7 @@ nodes:
     role: "rpc"
     bootnode: false
     name: "RPC-Gateway"
-    ip: "<ip-vm4>"              # Substitua pelo IP real da VM 4 (ex: JMeter)
+    ip: "<rpc-ip>"              # Substitua pelo IP real da VM 4 (ex: JMeter)
     p2pPort: 30303
     rpcHttp: true
     rpcHttpPort: 8545

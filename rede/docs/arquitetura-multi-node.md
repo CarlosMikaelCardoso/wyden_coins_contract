@@ -10,19 +10,19 @@ A rede é baseada no algoritmo de consenso **QBFT (Quorum Byzantine Fault Tolera
 
 ```mermaid
 graph TD
-    subgraph M1["VM 1 (Coordenadora / Bootnode)"]
+    subgraph M1["VM 1: Coordenadora / Bootnode (<node1-ip>)"]
         N1["Nó Validador 1<br/>(P2P: 30303)"]
     end
 
-    subgraph M2["VM 2 (Validador 2)"]
+    subgraph M2["VM 2: Validador 2 (<node2-ip>)"]
         N2["Nó Validador 2<br/>(P2P: 30303)"]
     end
 
-    subgraph M3["VM 3 (Validador 3)"]
+    subgraph M3["VM 3: Validador 3 (<node3-ip>)"]
         N3["Nó Validador 3<br/>(P2P: 30303)"]
     end
 
-    subgraph M4["VM 4 (Gateway RPC / Consultas)"]
+    subgraph M4["VM 4: Gateway RPC / Consultas (<rpc-ip>)"]
         RPC["Nó RPC Membro<br/>(P2P: 30303, RPC: 8545, WS: 8645)"]
     end
 

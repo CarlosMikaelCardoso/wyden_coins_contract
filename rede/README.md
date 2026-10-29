@@ -103,7 +103,7 @@ rede/
 
 Execute o orquestrador fornecendo o IP da VM 1:
 ```bash
-./deploy/setup-coordinator.sh --bootnode-ip <ip-vm1>
+./deploy/setup-coordinator.sh --bootnode-ip <node1-ip>
 ```
 
 Isso gera as chaves dos 3 validadores, o arquivo `genesis.json`, os pacotes em `dist/` e já sobe o Nó 1.
@@ -111,9 +111,9 @@ Isso gera as chaves dos 3 validadores, o arquivo `genesis.json`, os pacotes em `
 ### 2. Distribuir para as demais máquinas via SCP
 
 ```bash
-scp dist/node2.tar.gz <usuario>@<ip-vm2>:~/
-scp dist/node3.tar.gz <usuario>@<ip-vm3>:~/
-scp dist/rpc-node.tar.gz <usuario>@<ip-vm4>:~/
+scp dist/node2.tar.gz <usuario>@<node2-ip>:~/
+scp dist/node3.tar.gz <usuario>@<node3-ip>:~/
+scp dist/rpc-node.tar.gz <usuario>@<rpc-ip>:~/
 ```
 
 ### 3. Nas VMs 2 e 3 (Validadores QBFT)

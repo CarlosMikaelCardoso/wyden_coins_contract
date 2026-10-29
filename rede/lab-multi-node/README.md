@@ -6,10 +6,10 @@
 > [!TIP]
 > **Substituição Rápida com Ctrl + F:**
 > Este documento utiliza placeholders padronizados para facilitar a configuração do seu ambiente. Utilize o comando de busca e substituição do seu editor para preenchê-los com os valores reais da sua infraestrutura:
-> - `<ip-vm1>` : Endereço IP da **VM 1** (Coordenadora / Bootnode + Validador 1)
-> - `<ip-vm2>` : Endereço IP da **VM 2** (Validador 2)
-> - `<ip-vm3>` : Endereço IP da **VM 3** (Validador 3)
-> - `<ip-vm4>` : Endereço IP da **VM 4** (Gateway RPC / Consultas / Caliper / JMeter)
+> - `<node1-ip>` : Endereço IP da **VM 1** (Coordenadora / Bootnode + Validador 1)
+> - `<node2-ip>` : Endereço IP da **VM 2** (Validador 2)
+> - `<node3-ip>` : Endereço IP da **VM 3** (Validador 3)
+> - `<rpc-ip>` : Endereço IP da **VM 4** (Gateway RPC / Consultas / Caliper / JMeter)
 > - `<usuario>` : Nome do usuário SSH com permissão de sudo/docker nas máquinas
 
 ---
@@ -20,26 +20,26 @@ A arquitetura distribui o algoritmo de consenso bizantino **QBFT** entre 3 nós 
 
 | Máquina | Papel na Rede | Host / IP | Portas Expostas | Finalidade |
 | :--- | :--- | :--- | :--- | :--- |
-| **VM 1** | **Coordenador + Validador 1 (Bootnode)** | `<ip-vm1>` | `30303` (P2P), `8545` (RPC Local) | Descoberta P2P e proposta/assinatura de blocos |
-| **VM 2** | **Validador 2** | `<ip-vm2>` | `30303` (P2P), `8545` (RPC Local) | Assinatura e consenso QBFT |
-| **VM 3** | **Validador 3** | `<ip-vm3>` | `30303` (P2P), `8545` (RPC Local) | Assinatura e consenso QBFT |
-| **VM 4** | **Gateway RPC / Membro** | `<ip-vm4>` | `30303` (P2P), `8545` (HTTP Público), `8645` (WS) | Interface Web3 para DApps, MetaMask, Caliper e JMeter |
+| **VM 1** | **Coordenador + Validador 1 (Bootnode)** | `<node1-ip>` | `30303` (P2P), `8545` (RPC Local) | Descoberta P2P e proposta/assinatura de blocos |
+| **VM 2** | **Validador 2** | `<node2-ip>` | `30303` (P2P), `8545` (RPC Local) | Assinatura e consenso QBFT |
+| **VM 3** | **Validador 3** | `<node3-ip>` | `30303` (P2P), `8545` (RPC Local) | Assinatura e consenso QBFT |
+| **VM 4** | **Gateway RPC / Membro** | `<rpc-ip>` | `30303` (P2P), `8545` (HTTP Público), `8645` (WS) | Interface Web3 para DApps, MetaMask, Caliper e JMeter |
 
 ```mermaid
 graph TD
-    subgraph M1["VM 1: Coordenador / Bootnode (<ip-vm1>)"]
+    subgraph M1["VM 1: Coordenador / Bootnode (<node1-ip>)"]
         N1["Nó Validador 1<br/>(P2P: 30303)"]
     end
 
-    subgraph M2["VM 2: Validador (<ip-vm2>)"]
+    subgraph M2["VM 2: Validador (<node2-ip>)"]
         N2["Nó Validador 2<br/>(P2P: 30303)"]
     end
 
-    subgraph M3["VM 3: Validador (<ip-vm3>)"]
+    subgraph M3["VM 3: Validador (<node3-ip>)"]
         N3["Nó Validador 3<br/>(P2P: 30303)"]
     end
 
-    subgraph M4["VM 4: Gateway RPC (<ip-vm4>)"]
+    subgraph M4["VM 4: Gateway RPC (<rpc-ip>)"]
         RPC["Nó RPC Gateway<br/>(P2P: 30303, RPC: 8545, WS: 8645)"]
     end
 
@@ -81,7 +81,7 @@ A **VM 1** atuará como máquina coordenadora. Nela serão geradas as chaves cri
 
 Acesse a **VM 1**:
 ```bash
-ssh <usuario>@<ip-vm1>
+ssh <usuario>@<node1-ip>
 ```
 
 ### 3.1. Criar Diretórios de Trabalho na VM 1
@@ -176,7 +176,7 @@ O Enode identifica o Nó 1 na rede mundial/local através de sua chave pública 
 
 ```bash
 PUBKEY_NODE1=$(cat node1/data/key.pub | sed 's/^0x//')
-BOOTNODE_ENODE="enode://${PUBKEY_NODE1}@<ip-vm1>:30303"
+BOOTNODE_ENODE="enode://${PUBKEY_NODE1}@<node1-ip>:30303"
 
 echo "Bootnode Enode Oficial: ${BOOTNODE_ENODE}"
 ```
@@ -220,7 +220,7 @@ docker run -d \
   --data-path=/opt/besu/data \
   --genesis-file=/opt/besu/genesis.json \
   --p2p-port=30303 \
-  --p2p-host=<ip-vm1> \
+  --p2p-host=<node1-ip> \
   --min-gas-price=0 \
   --data-storage-format=BONSAI \
   --profile=ENTERPRISE \
@@ -245,13 +245,13 @@ Ainda na **VM 1**, transfira as pastas de configuração para cada uma das máqu
 
 ```bash
 # Enviar pasta node2 para a VM 2
-scp -r ~/besu-network/node2 <usuario>@<ip-vm2>:~/node2
+scp -r ~/besu-network/node2 <usuario>@<node2-ip>:~/node2
 
 # Enviar pasta node3 para a VM 3
-scp -r ~/besu-network/node3 <usuario>@<ip-vm3>:~/node3
+scp -r ~/besu-network/node3 <usuario>@<node3-ip>:~/node3
 
 # Enviar pasta rpcnode para a VM 4
-scp -r ~/besu-network/rpcnode <usuario>@<ip-vm4>:~/rpcnode
+scp -r ~/besu-network/rpcnode <usuario>@<rpc-ip>:~/rpcnode
 ```
 
 ---
@@ -260,11 +260,11 @@ scp -r ~/besu-network/rpcnode <usuario>@<ip-vm4>:~/rpcnode
 
 Acesse a **VM 2**:
 ```bash
-ssh <usuario>@<ip-vm2>
+ssh <usuario>@<node2-ip>
 cd ~/node2
 ```
 
-Inicie o contêiner do Validador 2 informando a Enode URL do Bootnode (`<ip-vm1>`):
+Inicie o contêiner do Validador 2 informando a Enode URL do Bootnode (`<node1-ip>`):
 
 ```bash
 docker run -d \
@@ -278,8 +278,8 @@ docker run -d \
   --data-path=/opt/besu/data \
   --genesis-file=/opt/besu/genesis.json \
   --p2p-port=30303 \
-  --p2p-host=<ip-vm2> \
-  --bootnodes=enode://<node1-pubkey>@<ip-vm1>:30303 \
+  --p2p-host=<node2-ip> \
+  --bootnodes=enode://<node1-pubkey>@<node1-ip>:30303 \
   --min-gas-price=0 \
   --data-storage-format=BONSAI \
   --profile=ENTERPRISE \
@@ -302,7 +302,7 @@ docker logs -f besu-node2
 
 Acesse a **VM 3**:
 ```bash
-ssh <usuario>@<ip-vm3>
+ssh <usuario>@<node3-ip>
 cd ~/node3
 ```
 
@@ -320,8 +320,8 @@ docker run -d \
   --data-path=/opt/besu/data \
   --genesis-file=/opt/besu/genesis.json \
   --p2p-port=30303 \
-  --p2p-host=<ip-vm3> \
-  --bootnodes=enode://<node1-pubkey>@<ip-vm1>:30303 \
+  --p2p-host=<node3-ip> \
+  --bootnodes=enode://<node1-pubkey>@<node1-ip>:30303 \
   --min-gas-price=0 \
   --data-storage-format=BONSAI \
   --profile=ENTERPRISE \
@@ -343,7 +343,7 @@ docker run -d \
 
 Acesse a **VM 4**:
 ```bash
-ssh <usuario>@<ip-vm4>
+ssh <usuario>@<rpc-ip>
 cd ~/rpcnode
 ```
 
@@ -361,8 +361,8 @@ docker run -d \
   --data-path=/opt/besu/data \
   --genesis-file=/opt/besu/genesis.json \
   --p2p-port=30303 \
-  --p2p-host=<ip-vm4> \
-  --bootnodes=enode://<node1-pubkey>@<ip-vm1>:30303 \
+  --p2p-host=<rpc-ip> \
+  --bootnodes=enode://<node1-pubkey>@<node1-ip>:30303 \
   --min-gas-price=0 \
   --data-storage-format=BONSAI \
   --profile=ENTERPRISE \
@@ -390,21 +390,21 @@ A partir de qualquer máquina com acesso de rede à **VM 4**, você pode interag
 ### 8.1. Verificar se os Peers estão Conectados
 ```bash
 curl -s -X POST --data '{"jsonrpc":"2.0","method":"net_peerCount","params":[],"id":1}' \
-  -H "Content-Type: application/json" http://<ip-vm4>:8545
+  -H "Content-Type: application/json" http://<rpc-ip>:8545
 ```
 *Resposta esperada:* `{"jsonrpc":"2.0","id":1,"result":"0x3"}` (3 peers conectados).
 
 ### 8.2. Verificar a Produção Contínua de Blocos
 ```bash
 curl -s -X POST --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
-  -H "Content-Type: application/json" http://<ip-vm4>:8545
+  -H "Content-Type: application/json" http://<rpc-ip>:8545
 ```
 *Execute o comando duas vezes com intervalo de 2 a 4 segundos; o número do bloco em hexadecimal deve avançar continuamente.*
 
 ### 8.3. Consultar os Validadores QBFT
 ```bash
 curl -s -X POST --data '{"jsonrpc":"2.0","method":"qbft_getValidatorsByBlockNumber","params":["latest"],"id":1}' \
-  -H "Content-Type: application/json" http://<ip-vm4>:8545
+  -H "Content-Type: application/json" http://<rpc-ip>:8545
 ```
 *Retornará o array com os endereços dos validadores das VMs 1, 2 e 3.*
 
