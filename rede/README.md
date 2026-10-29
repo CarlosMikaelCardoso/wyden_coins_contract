@@ -88,7 +88,7 @@ rede/
 │   └── test-single-machine.sh    # Validação automática da rede em máquina única
 │
 ├── docker/                       # Artefatos Docker padronizados
-│   ├── Dockerfile                # Imagem Besu baseada em hyperledger/besu:24.7.0
+│   ├── Dockerfile                # Imagem Besu baseada em hyperledger/besu:25.5.0
 │   ├── docker-compose.node.yaml  # Template Compose parametrizável via .env
 │   └── node.env.example          # Exemplo de variáveis de ambiente do nó
 │

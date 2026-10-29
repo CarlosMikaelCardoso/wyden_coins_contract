@@ -65,7 +65,7 @@ Informe o IP público ou de rede local acessível da VM 1:
 ```
 
 O script realizará automaticamente:
-1. Geração das 3 chaves dos validadores via contêiner oficial do Besu (`hyperledger/besu:24.7.0`).
+1. Geração das 3 chaves dos validadores via contêiner oficial do Besu (`hyperledger/besu:25.5.0`).
 2. Criação do `genesis.json` com QBFT configurado (2s block time, chainId 381660001, 0 gas, 3 validadores).
 3. Construção dos pacotes de distribuição em `rede/dist/`:
    * `dist/node1/` (inicializado localmente na VM 1).

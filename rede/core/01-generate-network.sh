@@ -83,7 +83,7 @@ echo "⚙️  [1/4] Gerando chaves criptográficas e genesis.json via Besu Docke
 docker run --rm \
   -u "$(id -u):$(id -g)" \
   -v "${BUILD_DIR}:/data" \
-  hyperledger/besu:24.7.0 \
+  hyperledger/besu:25.5.0 \
   operator generate-blockchain-config \
   --config-file=/data/genesis_QBFT.json \
   --to=/data/networkFiles \
