@@ -40,12 +40,12 @@ Para mais detalhes sobre o desenho da rede, consulte: [arquitetura-multi-node.md
 
 ---
 
-## 📚 Guias Manuais de Instalação (Sem Scripts .sh)
+## 📚 Guias Passo a Passo com Scripts Modulares (.sh)
 
-Para desenvolvedores, pesquisadores e operadores que desejam ter controle manual absoluto sobre a infraestrutura e compreender cada comando executado nos bastidores, consulte os tutoriais detalhados:
+Inspirados no modelo operacional do projeto **Ilíada (RNP / cenarios-bevel)**, a implantação da rede é desmembrada em etapas granulares com scripts dedicados (`.sh`), permitindo controle e acompanhamento de cada nó:
 
-* 🖥️ **[lab-single-node/README.md](file:///home/mikael/Documentos/Codes/facicoin/rede/lab-single-node/README.md)**: Guia completo para subir 4 nós em **máquina única** usando comandos `docker run` manuais, mapeamento de portas locais e geração criptográfica passo a passo.
-* 🌐 **[lab-multi-node/README.md](file:///home/mikael/Documentos/Codes/facicoin/rede/lab-multi-node/README.md)**: Guia completo para implantar a rede em **4 VMs distribuídas** usando comandos `docker run` manuais, configuração de bootnode externo, transferência via `scp` e placeholders padronizados (`<node1-ip>`, `<node2-ip>`, etc.).
+* 🖥️ **[lab-single-node/README.md](file:///home/mikael/Documentos/Codes/facicoin/rede/lab-single-node/README.md)**: Guia passo a passo para implantar os 4 nós em **máquina única** utilizando scripts modulares para requisitos, geração de chaves, inicialização individual de cada nó e diagnóstico consolidado.
+* 🌐 **[lab-multi-node/README.md](file:///home/mikael/Documentos/Codes/facicoin/rede/lab-multi-node/README.md)**: Guia passo a passo para implantar a rede em **4 VMs distribuídas** com scripts por máquina (VM 1 Coordenadora, envio via SCP, subida dos validadores nas VMs 2 e 3, e gateway RPC na VM 4).
 
 ---
 
@@ -53,10 +53,23 @@ Para desenvolvedores, pesquisadores e operadores que desejam ter controle manual
 
 ```bash
 rede/
-├── lab-single-node/              # Tutorial de instalação manual em máquina única (sem .sh)
+├── lab-single-node/              # Procedimento passo a passo em máquina única (com scripts .sh modulares)
+│   ├── 01-install-requirements.sh
+│   ├── 02-generate-network.sh
+│   ├── 03-start-node1.sh
+│   ├── 04-start-node2.sh
+│   ├── 05-start-node3.sh
+│   ├── 06-start-rpcnode.sh
+│   ├── 07-check-network.sh
+│   ├── 08-stop-network.sh
 │   └── README.md
 │
-├── lab-multi-node/               # Tutorial de instalação manual em 4 VMs (sem .sh)
+├── lab-multi-node/               # Procedimento passo a passo em 4 VMs (com scripts .sh por máquina)
+│   ├── 01-install-requirements.sh
+│   ├── 02-setup-vm1-coordinator.sh
+│   ├── 03-transfer-to-vms.sh
+│   ├── 04-check-network.sh
+│   ├── 05-stop-network.sh
 │   └── README.md
 │
 ├── configs/                      # Modelos declarativos e configurações base
