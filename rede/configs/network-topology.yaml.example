@@ -42,12 +42,12 @@ nodes:
     rpcHttp: false
     wsEnabled: false
 
-  # VM 4: Nó RPC / Gateway para API, Caliper, JMeter e MetaMask
+  # VM 4: Nó RPC / Gateway de Integração e Aplicações Externas
   - id: "rpcnode"
     role: "rpc"
     bootnode: false
     name: "RPC-Gateway"
-    ip: "<rpc-ip>"              # Substitua pelo IP real da VM 4 (ex: JMeter)
+    ip: "<rpc-ip>"              # Substitua pelo IP real da VM 4
     p2pPort: 30303
     rpcHttp: true
     rpcHttpPort: 8545

@@ -7,7 +7,7 @@
 
 ## 1. Visão Geral da Arquitetura Local
 
-Neste laboratório, simulamos a rede completa (3 validadores QBFT e 1 gateway RPC) em uma **única máquina** (seu computador local ou uma VM de teste, como a máquina JMeter).
+Este laboratório descreve a implantação e operação da rede completa (3 nós validadores QBFT e 1 nó gateway RPC) em um **único host** (computador local ou máquina virtual dedicada).
 
 Para que 4 instâncias do Hyperledger Besu possam rodar simultaneamente no mesmo sistema operacional sem conflitos de rede, cada nó utiliza portas específicas na interface de loopback (`127.0.0.1`):
 
@@ -19,7 +19,7 @@ Para que 4 instâncias do Hyperledger Besu possam rodar simultaneamente no mesmo
 | **`besu-rpcnode`** | **Gateway RPC / Consultas** | `30306` | `8545` (Padrão para DApps) | `8645` |
 
 > [!TIP]
-> O nó `besu-rpcnode` é configurado na porta padrão **8545**. Dessa forma, quaisquer contratos inteligentes, carteiras (MetaMask), scripts Node.js ou testes de benchmark (Caliper / JMeter) podem se conectar diretamente em `http://127.0.0.1:8545` sem qualquer alteração.
+> O nó `besu-rpcnode` expõe a porta padrão **8545**. Dessa forma, contratos inteligentes, carteiras (MetaMask), scripts Node.js e ferramentas de benchmark de carga podem se conectar diretamente ao endpoint `http://127.0.0.1:8545` sem necessidade de reconfiguração de portas.
 
 ---
 

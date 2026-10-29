@@ -33,11 +33,9 @@ contract RedemptionManager is AccessControl {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
-    // O aluno resgata o benefício e as moedas ficam retidas NESTE contrato
+    // Registra a solicitação de resgate de um benefício, transferindo os tokens para custódia do contrato
     function resgatar(uint256 beneficioId, uint256 valor, uint64 expiraEm) external returns (uint256 id) {
-        // O aluno precisa ter dado approve() no token antes, ou podemos usar transfer() já que o
-        // _update() do token permite transferências PARA este contrato.
-        // Vamos usar transferFrom puxando as moedas do aluno para o contrato.
+        // Transfere tokens do solicitante para a custódia temporária deste contrato
         require(token.transferFrom(msg.sender, address(this), valor), "Falha ao bloquear moedas");
         
         id = nextResgateId++;
@@ -52,7 +50,7 @@ contract RedemptionManager is AccessControl {
         emit ResgateCriado(id, msg.sender, beneficioId, valor, expiraEm);
     }
 
-    // O validador (cantina, mentor, etc) confirma o uso
+    // Confirma a utilização do benefício pelo operador autorizado e executa a queima (burn) dos tokens
     function confirmarUso(uint256 id) external onlyRole(CONFIRMER_ROLE) {
         Resgate storage r = resgates[id];
         require(r.status == Status.Resgatado, "Resgate nao esta pendente");
@@ -60,26 +58,26 @@ contract RedemptionManager is AccessControl {
 
         r.status = Status.Utilizado;
         
-        // Queima as moedas que estavam bloqueadas no contrato
+        // Executa a queima dos tokens custodiados no contrato
         token.burn(r.valor);
 
         emit ResgateUtilizado(id);
     }
 
-    // O administrador (backend) cancela o resgate (ex: erro no pedido)
+    // Cancela a solicitação pendente e restitui os tokens ao solicitante
     function cancelar(uint256 id) external onlyRole(MANAGER_ROLE) {
         Resgate storage r = resgates[id];
         require(r.status == Status.Resgatado, "Resgate nao pendente");
 
         r.status = Status.Cancelado;
         
-        // Devolve ao aluno
+        // Restitui os tokens ao solicitante
         require(token.transfer(r.aluno, r.valor), "Falha na devolucao");
 
         emit ResgateCancelado(id);
     }
 
-    // O backend varre o banco verificando se o prazo expirou e chama essa função
+    // Registra a expiração da solicitação por decurso de prazo e restitui os tokens ao solicitante
     function expirar(uint256 id) external onlyRole(MANAGER_ROLE) {
         Resgate storage r = resgates[id];
         require(r.status == Status.Resgatado, "Resgate nao pendente");
@@ -87,7 +85,7 @@ contract RedemptionManager is AccessControl {
 
         r.status = Status.Expirado;
         
-        // Devolve ao aluno
+        // Restitui os tokens ao solicitante
         require(token.transfer(r.aluno, r.valor), "Falha na devolucao");
 
         emit ResgateExpirado(id);

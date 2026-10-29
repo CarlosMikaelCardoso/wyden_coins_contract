@@ -2,7 +2,7 @@
 
 Esta é a forma **mais leve e recomendada** para membros da equipe que utilizam Windows. O WSL 2 (Windows Subsystem for Linux) permite rodar um ambiente Linux nativo diretamente no Windows, compartilhando o Kernel e consumindo muito menos memória do que uma Máquina Virtual tradicional.
 
-Como nossa rede da WydenCoin (Hyperledger Besu) roda inteiramente isolada dentro de contêineres Docker, o WSL 2 é perfeito para o trabalho.
+Como a infraestrutura de rede da WydenCoin (Hyperledger Besu) roda isolada em contêineres Docker, o WSL 2 atende perfeitamente aos requisitos de desenvolvimento.
 
 ---
 

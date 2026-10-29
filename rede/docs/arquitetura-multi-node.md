@@ -6,7 +6,7 @@ Este documento detalha o desenho de arquitetura de rede distribuída entre **4 m
 
 ## 1. Topologia da Rede (4 VMs)
 
-A rede é baseada no algoritmo de consenso **QBFT (Quorum Byzantine Fault Tolerance)** com **3 nós validadores** e **1 nó de gateway/RPC** para consultas, API e testes de carga (Caliper/JMeter):
+A rede é baseada no algoritmo de consenso **QBFT (Quorum Byzantine Fault Tolerance)** com **3 nós validadores** e **1 nó de gateway/RPC** para consultas, API e integração de aplicações externas:
 
 ```mermaid
 graph TD
@@ -51,7 +51,7 @@ graph TD
 * **Portas Abertas:** `30303` TCP/UDP (P2P).
 
 ### C. VM 4: Máquina Gateway / RPC (Consultas e Transações)
-* **Papel:** Ponto de entrada e saída de dados para o mundo externo (API Node.js, Caliper, JMeter, MetaMask).
+* **Papel:** Ponto de entrada e saída de dados para o mundo externo (APIs backend, MetaMask, ferramentas de teste de carga e benchmark).
 * **Execução:** Não possui chave de validador (não assina blocos, apenas replica o estado da cadeia).
 * **Portas Abertas:**
   * `30303` TCP/UDP (P2P);
@@ -68,6 +68,6 @@ Para garantir a comunicação entre as máquinas em uma rede corporativa/laborat
 | Porta | Protocolo | Origem | Destino | Finalidade |
 |:------|:----------|:-------|:--------|:-----------|
 | `30303` | TCP / UDP | Qualquer nó da rede | Todas as máquinas | Descoberta e sincronização P2P do Besu |
-| `8545` | TCP | Backend / JMeter / Devs | Máquina RPC | Envio de transações e consultas Web3 |
+| `8545` | TCP | Aplicações clientes / Devs | Máquina RPC | Envio de transações e consultas Web3 |
 | `8645` | TCP | Backend / Indexador | Máquina RPC | Assinatura de WebSockets para eventos |
 | `9545` | TCP | Servidor Prometheus | Máquina RPC | Coleta de telemetria |

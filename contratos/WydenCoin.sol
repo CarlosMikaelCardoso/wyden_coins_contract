@@ -12,27 +12,27 @@ contract WydenCoin is ERC20, ERC20Burnable, AccessControl {
     event RewardMinted(address indexed aluno, uint256 valor, bytes32 motivo);
 
     constructor() ERC20("WydenCoin", "WC") {
-        // O deployer vira o administrador geral
+        // Concede a role DEFAULT_ADMIN_ROLE ao endereço deployer
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
-    // Define qual endereço é o contrato de resgate
+    // Registra o endereço autorizado do RedemptionManager
     function setRedemptionManager(address _redemptionManager) external onlyRole(DEFAULT_ADMIN_ROLE) {
         redemptionManager = _redemptionManager;
     }
 
-    // 0 casas decimais para facilitar a vida do front-end e UX (1 WC = 1 inteiro)
+    // Define 0 casas decimais (1 token WC = 1 unidade inteira)
     function decimals() public pure override returns (uint8) {
         return 0;
     }
 
-    // Função que o Backend/Motor de Recompensas vai chamar para dar moedas ao aluno
+    // Emite tokens de bonificação individual associados ao código do motivo
     function mintReward(address aluno, uint256 valor, bytes32 motivo) external onlyRole(MINTER_ROLE) {
         _mint(aluno, valor);
         emit RewardMinted(aluno, valor, motivo);
     }
 
-    // Função de emissão em lote para processar ciclos de dezenas de alunos eficientemente
+    // Emissão em lote de recompensas para múltiplos destinatários em transação única
     function mintRewardBatch(
         address[] calldata alunos,
         uint256[] calldata valores,
@@ -48,12 +48,12 @@ contract WydenCoin is ERC20, ERC20Burnable, AccessControl {
         }
     }
 
-    // Sobrescrevemos o hook de atualização de saldo para bloquear transferências
-    // P2P (entre alunos) evitando comércio paralelo das moedas.
+    // Sobrescreve o hook _update para restringir transferências diretas P2P,
+    // permitindo apenas operações originadas por ou destinadas ao RedemptionManager.
     function _update(address from, address to, uint256 value) internal override {
-        // Se não for um mint (from == 0) nem um burn (to == 0)
+        // Ignora emissão (from == 0) e queima (to == 0)
         if (from != address(0) && to != address(0)) {
-            // Só permite a transferência se for originada pelo ou para o RedemptionManager
+            // Permite transferência apenas se envolver o contrato de resgate autorizado
             require(
                 msg.sender == redemptionManager || to == redemptionManager || from == redemptionManager,
                 "WydenCoin: transferencias diretas entre alunos estao bloqueadas"

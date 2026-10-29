@@ -4,13 +4,13 @@ const { ethers } = require('ethers');
 // 1. Configurações de Conexão e Variáveis
 // ==========================================
 
-// URL de conexão com a rede Hyperledger Besu (RPC local do Jmeter ou rede configurada)
+// Endpoint JSON-RPC da rede Hyperledger Besu
 const RPC_URL = "http://127.0.0.1:8545";
 
-// Instanciamos o provedor (Provider) que fará a comunicação de leitura/escrita com o Besu
+// Provedor JSON-RPC para comunicação de leitura e escrita com a blockchain Besu
 const provider = new ethers.JsonRpcProvider(RPC_URL);
 
-// Chave privada do Administrador (O mesmo que fez o deploy e possui as MINTER/MANAGER/CONFIRMER Roles)
+// Chave privada da conta administradora (detentora das roles DEFAULT_ADMIN, MINTER, MANAGER e CONFIRMER)
 const ADMIN_PRIVATE_KEY = "8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63";
 
 // Wallet do Administrador conectada ao provedor
@@ -20,7 +20,7 @@ const adminWallet = new ethers.Wallet(ADMIN_PRIVATE_KEY, provider);
 const WYDENCOIN_ADDRESS = "0x42699A7612A82f1d9C36148af9C77354759b210b";
 const REDEMPTION_MANAGER_ADDRESS = "0xa50a51c09a5c451C52BB714527E1974b686D8e77";
 
-// ABIs (Application Binary Interface) - Explicam para o Javascript como os contratos funcionam
+// Definições de ABI (Application Binary Interface) para interface com os contratos
 const WYDENCOIN_ABI = [
     "function mintReward(address aluno, uint256 valor, bytes32 motivo) external",
     "function approve(address spender, uint256 value) returns (bool)",
@@ -41,98 +41,93 @@ const redemptionManagerAdmin = new ethers.Contract(REDEMPTION_MANAGER_ADDRESS, R
 
 
 /**
- * EXEMPLO 1: Ler o saldo do aluno
- * Como a leitura (view) não gasta taxa de transação e não altera estado, 
- * ela é muito rápida e só retorna o valor na mesma hora.
+ * Consulta de Saldo de Aluno
+ * Operação de leitura (call / view) sem custo de gas ou alteração de estado global.
  */
 async function exemploLerSaldo(alunoAddress) {
     const saldo = await wydenCoinAdmin.balanceOf(alunoAddress);
-    console.log(`O saldo do aluno é: ${saldo.toString()} WC`);
+    console.log(`Saldo do aluno: ${saldo.toString()} WC`);
 }
 
 /**
- * EXEMPLO 2: Dar moedas a um aluno (MINT)
- * Isso é uma transação de escrita, logo, precisamos enviá-la e aguardar ela 
- * ser processada e inserida em um bloco da rede (wait).
+ * Emissão de Tokens (Mint)
+ * Transação de escrita on-chain executada por conta autorizada (MINTER_ROLE).
  */
 async function exemploMintarMoedas(alunoAddress, valor) {
     try {
-        // O motivo deve ser um identificador curto. Precisa ser codificado em bytes32.
         const motivoBytes = ethers.encodeBytes32String("PRESENCA_SIA");
         
-        // Dispara a transação (usando a wallet que tem a MINTER_ROLE)
+        // Submete a transação à rede
         const tx = await wydenCoinAdmin.mintReward(alunoAddress, valor, motivoBytes);
-        console.log(`Enviando transação... Hash: ${tx.hash}`);
+        console.log(`Submetendo transação... Hash: ${tx.hash}`);
 
-        // Espera a transação ser confirmada na blockchain
+        // Aguarda a confirmação da transação em um bloco minerado
         const receipt = await tx.wait();
         
         console.log("Transação confirmada no bloco:", receipt.blockNumber);
-        console.log("Moedas foram geradas com sucesso para o aluno!");
+        console.log("Tokens emitidos com sucesso.");
 
     } catch (erro) {
-        console.error("Erro ao mintar moedas:", erro.message);
+        console.error("Erro na emissão de tokens:", erro.message);
     }
 }
 
 /**
- * EXEMPLO 3: Fazer o aluno Comprar/Resgatar um benefício (Cria retenção)
- * Como o Resgate retira as moedas da conta do aluno, precisamos assinar 
- * a transação usando a chave privada daquele aluno específico.
+ * Solicitação de Resgate de Benefício
+ * Operação de retenção/custódia de tokens assinada pelo solicitante.
  */
 async function exemploResgatarBeneficio(alunoPrivateKey, beneficioId, valorWC, horasParaExpirar) {
     try {
-        // Conecta a carteira do aluno na blockchain (Custodial Wallet controlada pelo backend)
+        // Inicializa a carteira do aluno
         const alunoWallet = new ethers.Wallet(alunoPrivateKey, provider);
         
-        // Instancia o contrato como se nós fossemos o aluno
+        // Instancia o contrato conectado ao signatário solicitante
         const redemptionManagerAluno = new ethers.Contract(REDEMPTION_MANAGER_ADDRESS, REDEMPTION_MANAGER_ABI, alunoWallet);
 
-        // Gera timestamp de validade (em segundos Unix)
+        // Define o prazo de validade em timestamp Unix (segundos)
         const expiraEm = Math.floor(Date.now() / 1000) + (horasParaExpirar * 3600);
 
-        // Chama a função
+        // Submete a transação de resgate
         const tx = await redemptionManagerAluno.resgatar(beneficioId, valorWC, expiraEm);
         const receipt = await tx.wait();
 
-        console.log("Resgate criado! Transação Hash:", receipt.hash);
+        console.log("Resgate criado. Hash da transação:", receipt.hash);
 
-        // [OPCIONAL] Capturando o ID do resgate lendo o evento emitido pelo contrato
+        // Captura do identificador único do resgate a partir do evento ResgateCriado
         for (const log of receipt.logs) {
             try {
                 const parsedLog = redemptionManagerAluno.interface.parseLog(log);
                 if (parsedLog.name === "ResgateCriado") {
-                    const idResgateGerado = parsedLog.args[0].toString(); // args[0] é o 'id'
-                    console.log(`Salve no banco de dados o ID do resgate na blockchain: ${idResgateGerado}`);
+                    const idResgateGerado = parsedLog.args[0].toString();
+                    console.log(`Identificador do resgate registrado on-chain: ${idResgateGerado}`);
                 }
             } catch (e) {
-                // Esse log pode não ser do evento que queremos, então ignoramos
+                // Log não correspondente ao evento esperado
             }
         }
     } catch (erro) {
-         console.error("Erro ao criar resgate:", erro.message);
+         console.error("Erro ao registrar resgate:", erro.message);
     }
 }
 
 /**
- * EXEMPLO 4: Rotina de Gerenciamento do Admin
- * Usar essas funções quando a cantina aprovar o pedido, ou a API cancelar/expirar.
+ * Operações de Gestão do Ciclo de Vida do Resgate
+ * Executadas pelas contas detentoras das roles CONFIRMER_ROLE ou MANAGER_ROLE.
  */
 async function exemploGerenciamentoVoucher(idBlockchain) {
-    // 4.1 Confirmar Uso (Queima moedas). Deve ser executado pela conta com CONFIRMER_ROLE
+    // Confirmação de uso e queima de tokens (requer CONFIRMER_ROLE)
     const txConfirm = await redemptionManagerAdmin.confirmarUso(idBlockchain);
     await txConfirm.wait();
-    console.log("Uso confirmado e moedas queimadas!");
+    console.log("Uso confirmado e tokens queimados.");
 
-    // 4.2 Cancelar Compra (Estorna para aluno). Exige conta com MANAGER_ROLE
+    // Cancelamento da solicitação e devolução de saldo ao aluno (requer MANAGER_ROLE)
     const txCancel = await redemptionManagerAdmin.cancelar(idBlockchain);
     await txCancel.wait();
-    console.log("Compra cancelada e valor estornado!");
+    console.log("Resgate cancelado e saldo restituído ao aluno.");
 
-    // 4.3 Expirar (Estorna para aluno). Exige conta com MANAGER_ROLE
-    // Geralmente deve ser chamado num script agendado do servidor que roda diariamente
+    // Expiração por decurso de prazo e restituição de saldo (requer MANAGER_ROLE)
     const txExpire = await redemptionManagerAdmin.expirar(idBlockchain);
     await txExpire.wait();
-    console.log("Validade vencida. Valor estornado ao aluno!");
+    console.log("Prazo expirado e saldo restituído ao aluno.");
 }
 

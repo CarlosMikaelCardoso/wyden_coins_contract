@@ -39,7 +39,7 @@ multipass launch -c 2 -m 2G -d 20G -n wydencoin
    sudo usermod -aG docker ubuntu
    newgrp docker
    ```
-4. Suba a rede executando nosso script:
+4. Inicialize a rede executando o script de inicialização:
    ```bash
    ./start.sh
    ```

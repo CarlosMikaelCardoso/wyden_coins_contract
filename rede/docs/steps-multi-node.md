@@ -13,13 +13,13 @@ A rede é composta por 4 máquinas participantes:
 | **VM 1** | **Coordenador + Validador 1 (Bootnode)** | `<node1-ip>` | `30303` (P2P TCP/UDP), `8545` (RPC Local) |
 | **VM 2** | **Validador 2 (QBFT)** | `<node2-ip>` | `30303` (P2P TCP/UDP), `8545` (RPC Local) |
 | **VM 3** | **Validador 3 (QBFT)** | `<node3-ip>` | `30303` (P2P TCP/UDP), `8545` (RPC Local) |
-| **VM 4** | **Gateway RPC / Consultas / Caliper / JMeter** | `<rpc-ip>` | `30303` (P2P), `8545` (HTTP RPC Público), `8645` (WS) |
+| **VM 4** | **Gateway RPC / Consultas e Aplicações Externas** | `<rpc-ip>` | `30303` (P2P), `8545` (HTTP RPC Público), `8645` (WS) |
 
 > [!TIP]
 > Substitua os placeholders `<node1-ip>`, `<node2-ip>`, `<node3-ip>`, `<rpc-ip>` e `<usuario>` pelos valores reais do seu laboratório utilizando o recurso de buscar e substituir (**Ctrl + F**).
 
 > [!NOTE]
-> Os nós validadores 1 a 3 participam do algoritmo de consenso QBFT e produzem blocos a cada 2 segundos. O nó RPC (VM 4) atua exclusivamente como gateway de API para contratos inteligentes, testes de carga (Caliper/JMeter) e carteiras (MetaMask), mantendo a integridade e segurança dos nós validadores.
+> Os nós validadores 1 a 3 participam do algoritmo de consenso QBFT e produzem blocos a cada 2 segundos. O nó RPC (VM 4) atua exclusivamente como gateway de API para contratos inteligentes, ferramentas de benchmark e carteiras (MetaMask), mantendo a integridade e segurança dos nós validadores.
 
 ---
 
@@ -54,7 +54,7 @@ A VM 1 é responsável por gerar as chaves criptográficas de todos os nós, o a
 
 ### Passo 1: Navegar até o diretório da rede
 ```bash
-cd /home/mikael/Documentos/Codes/facicoin/rede
+cd rede
 ```
 
 ### Passo 2: Executar o Assistente de Inicialização do Coordenador
@@ -93,7 +93,7 @@ scp dist/node2.tar.gz <usuario>@<node2-ip>:~/
 # Para a VM 3 (Validador 3)
 scp dist/node3.tar.gz <usuario>@<node3-ip>:~/
 
-# Para a VM 4 (Gateway RPC / Consultas / JMeter / Caliper)
+# Para a VM 4 (Gateway RPC / Consultas e Aplicações Externas)
 scp dist/rpc-node.tar.gz <usuario>@<rpc-ip>:~/
 ```
 
@@ -131,7 +131,7 @@ Com 2 ou 3 validadores online (maioria qualificada QBFT), a rede iniciará a pro
 
 ---
 
-## 6. VM 4 (Gateway RPC / Consultas / Caliper / JMeter)
+## 6. VM 4 (Gateway RPC / Consultas e Aplicações Externas)
 
 Acesse a VM 4 para colocar o nó de consulta e transações no ar:
 

@@ -185,7 +185,7 @@ mkdir -p "${RPC_PKG_DIR}/data"
 
 if [[ "${SINGLE_MACHINE}" == "true" ]]; then
   RPC_P2P_PORT=30306
-  RPC_HTTP_PORT=8545 # Porta RPC principal para Caliper, JMeter e DApps
+  RPC_HTTP_PORT=8545 # Porta RPC principal para aplicações e testes de carga
   RPC_WS_PORT=8645
   RPC_METRICS_PORT=9545
 else
@@ -236,7 +236,7 @@ Os pacotes prontos para cada máquina foram gerados em: \`${DIST_DIR}\`.
   tar -xzf node3.tar.gz && cd node3 && ./run.sh
   \`\`\`
 
-### 3. VM 4 (Nó RPC / Consultas / Caliper / JMeter)
+### 3. VM 4 (Nó RPC / Gateway de Consultas e Aplicações)
 * Copie o pacote RPC:
   \`\`\`bash
   scp dist/rpc-node.tar.gz <usuario>@<rpc-ip>:~/

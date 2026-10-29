@@ -9,7 +9,7 @@
 > - `<node1-ip>` : Endereço IP da **VM 1** (Coordenadora / Bootnode + Validador 1)
 > - `<node2-ip>` : Endereço IP da **VM 2** (Validador 2)
 > - `<node3-ip>` : Endereço IP da **VM 3** (Validador 3)
-> - `<rpc-ip>` : Endereço IP da **VM 4** (Gateway RPC / Consultas / Caliper / JMeter)
+> - `<rpc-ip>` : Endereço IP da **VM 4** (Gateway RPC / Consultas e Aplicações Externas)
 > - `<usuario>` : Nome do usuário SSH com permissão de sudo/docker nas máquinas
 
 ---
@@ -23,7 +23,7 @@ A arquitetura distribui o algoritmo de consenso bizantino **QBFT** entre 3 nós 
 | **VM 1** | **Coordenador + Validador 1 (Bootnode)** | `<node1-ip>` | `30303` (P2P), `8545` (RPC Local) | Descoberta P2P e proposta/assinatura de blocos |
 | **VM 2** | **Validador 2** | `<node2-ip>` | `30303` (P2P), `8545` (RPC Local) | Assinatura e consenso QBFT |
 | **VM 3** | **Validador 3** | `<node3-ip>` | `30303` (P2P), `8545` (RPC Local) | Assinatura e consenso QBFT |
-| **VM 4** | **Gateway RPC / Membro** | `<rpc-ip>` | `30303` (P2P), `8545` (HTTP Público), `8645` (WS) | Interface Web3 para DApps, MetaMask, Caliper e JMeter |
+| **VM 4** | **Gateway RPC / Membro** | `<rpc-ip>` | `30303` (P2P), `8545` (HTTP Público), `8645` (WS) | Interface Web3 para DApps, MetaMask e ferramentas de benchmark de carga |
 
 ```mermaid
 graph TD

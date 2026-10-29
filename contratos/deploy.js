@@ -44,9 +44,9 @@ async function main() {
     await (await rmContract.grantRole(MANAGER_ROLE, wallet.address)).wait();
     console.log(`[OK] CONFIRMER_ROLE e MANAGER_ROLE concedidas ao administrador.`);
 
-    console.log("\n-> Dando Approve infinito no token para o RedemptionManager...");
+    console.log("\n-> Configurando aprovação de transferência para o RedemptionManager...");
     await (await wcContract.approve(rmAddress, ethers.MaxUint256)).wait();
-    console.log("[OK] Approve concedido!");
+    console.log("[OK] Limite de transferência aprovado.");
 
     console.log("\nDeploy finalizado com sucesso!");
     const addrs = {
@@ -54,15 +54,15 @@ async function main() {
         RedemptionManager: rmAddress
     };
     fs.writeFileSync('addresses.json', JSON.stringify(addrs, null, 2));
-    console.log("\n-> Concedendo MINTER_ROLE para os Workers do Caliper...");
+    console.log("\n-> Concedendo MINTER_ROLE para contas de teste/benchmark...");
     const seed = "0x3f841bf589fdf83a521e55d51afddc34fa65351161eead24f064855fc29c9580";
     const hdNode = ethers.HDNodeWallet.fromSeed(seed);
     for(let i=0; i<10; i++) {
         const workerAddr = hdNode.derivePath(`m/44\x27/60\x27/0\x27/0/${i}`).address;
         await (await wcContract.grantRole(MINTER_ROLE, workerAddr)).wait();
     }
-    console.log("[OK] Workers autorizados!");
-    console.log("Endereços salvos em addresses.json");
+    console.log("[OK] Contas de benchmark autorizadas.");
+    console.log("Endereços registrados em addresses.json");
 }
 
 main().catch((error) => {

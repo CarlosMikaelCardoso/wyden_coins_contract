@@ -32,7 +32,7 @@ A rede utiliza o algoritmo de consenso bizantino **QBFT (Quorum Byzantine Fault 
                   |               VM 4                |
                   |       Gateway RPC / Consultas     |
                   |  HTTP 8545 | WS 8645 | Metrics 9545
-                  |     (Caliper, JMeter, DApps)      |
+                  |     (DApps, Benchmarks, APIs)     |
                   +-----------------------------------+
 ```
 
@@ -45,7 +45,7 @@ Para mais detalhes sobre o desenho da rede, consulte: [arquitetura-multi-node.md
 Para desenvolvedores, pesquisadores e operadores que desejam ter controle manual absoluto sobre a infraestrutura e compreender cada comando executado nos bastidores, consulte os tutoriais detalhados:
 
 * 🖥️ **[lab-single-node/README.md](file:///home/mikael/Documentos/Codes/facicoin/rede/lab-single-node/README.md)**: Guia completo para subir 4 nós em **máquina única** usando comandos `docker run` manuais, mapeamento de portas locais e geração criptográfica passo a passo.
-* 🌐 **[lab-multi-node/README.md](file:///home/mikael/Documentos/Codes/facicoin/rede/lab-multi-node/README.md)**: Guia completo para implantar a rede em **4 VMs distribuídas** usando comandos `docker run` manuais, configuração de bootnode externo, transferência via `scp` e placeholders padronizados (`<ip-vm1>`, `<ip-vm2>`, etc.).
+* 🌐 **[lab-multi-node/README.md](file:///home/mikael/Documentos/Codes/facicoin/rede/lab-multi-node/README.md)**: Guia completo para implantar a rede em **4 VMs distribuídas** usando comandos `docker run` manuais, configuração de bootnode externo, transferência via `scp` e placeholders padronizados (`<node1-ip>`, `<node2-ip>`, etc.).
 
 ---
 
@@ -121,7 +121,7 @@ scp dist/rpc-node.tar.gz <usuario>@<rpc-ip>:~/
 tar -xzf nodeX.tar.gz && cd nodeX && ./run.sh
 ```
 
-### 4. Na VM 4 (Gateway RPC / Consultas / Caliper / JMeter)
+### 4. Na VM 4 (Gateway RPC / Consultas e Aplicações Externas)
 ```bash
 tar -xzf rpc-node.tar.gz && cd rpc-node && ./run.sh
 ```

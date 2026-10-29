@@ -119,7 +119,7 @@ def generate_markdown(tps_data):
     else:
         md_content += "| N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A |\n"
     
-    md_content += "\n\n---\n*Gerado automaticamente na VM JMeter.*"
+    md_content += "\n\n---\n*Relatório gerado automaticamente a partir dos logs de execução de benchmark.*"
 
     with open("relatorio_caliper_completo.md", "w", encoding="utf-8") as f:
         f.write(md_content)

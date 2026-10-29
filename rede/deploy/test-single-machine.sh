@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # ==============================================================================
 # test-single-machine.sh
-# Validação completa da rede Besu QBFT (4 nós) em uma única máquina (ex: VM JMeter)
-# Testa a integridade dos scripts .sh e contêineres antes da dispersão em múltiplas VMs.
+# Validação completa da rede Besu QBFT (4 nós) em uma única máquina física ou virtual
+# Testa a integridade dos scripts e contêineres antes da distribuição em múltiplos nós.
 # ==============================================================================
 set -o errexit
 set -o nounset
