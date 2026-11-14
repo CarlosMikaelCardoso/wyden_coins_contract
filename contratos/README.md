@@ -4,6 +4,19 @@ Esta documentação explica a arquitetura e o funcionamento dos contratos inteli
 
 ---
 
+## 📍 Endereços na Rede Multi-Node (Oracle Cloud - Besu QBFT)
+
+* **RPC Endpoint:** `http://129.146.55.236:8545`
+* **Chain ID:** `381660001` (`0x16bfab61`)
+* **Consenso:** QBFT (Blocos a cada 2 segundos, custo de gas zerado)
+
+| Contrato | Endereço Implantado |
+| :--- | :--- |
+| **WydenCoin (`WC`)** | `0xa50a51c09a5c451C52BB714527E1974b686D8e77` |
+| **RedemptionManager** | `0x9a3DBCa554e9f6b9257aAa24010DA8377C57c17e` |
+
+---
+
 ## 1. WydenCoin (Token WC)
 
 ### Papéis (Roles)
