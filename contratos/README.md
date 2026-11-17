@@ -103,7 +103,35 @@ Esses eventos são fundamentais para o indexador manter o banco de dados sincron
 
 ---
 
-## Passo a Passo para o Setup do Backend (Ethers.js)
+## 🛠️ Passo a Passo para o Setup do Backend (Recomendado: Gateway API)
+
+Para a API Node.js/Express (desenvolvida por Luiz Felipe e Henrique) se comunicar com a blockchain de forma segura e sem complexidade de Web3, utilize o cliente oficial do Gateway:
+
+👉 **Consulte o guia completo com exemplos práticos: [`GUIA_INTEGRACAO_BACKEND.md`](GUIA_INTEGRACAO_BACKEND.md)**  
+👉 **Arquivo do cliente pronto para copiar: [`gateway_client.js`](gateway_client.js)**
+
+### Como Inicializar no Backend:
+```bash
+# 1. Copie o gateway_client.js para seu projeto Express
+# 2. No seu .env, adicione:
+BLOCKCHAIN_GATEWAY_URL=http://129.146.55.236:8546
+BLOCKCHAIN_GATEWAY_TOKEN=wyden-rpc-sec-9a8f27b4e1
+```
+
+```javascript
+const { WydencoinGatewayClient } = require('./gateway_client');
+const blockchain = new WydencoinGatewayClient();
+
+// Exemplo: Consultar saldo
+const { saldo } = await blockchain.getSaldo("0x...");
+
+// Exemplo: Bonificar aluno
+await blockchain.emitirRecompensa("0x...", 20, "SIA_15D");
+```
+
+---
+
+## Passo a Passo Alternativo (Direto via Ethers.js - Baixo Nível)
 
 Para a API Node.js/Express se comunicar com os contratos usando a biblioteca `ethers`, siga esse padrão:
 
