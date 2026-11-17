@@ -1,123 +1,61 @@
-# 📱 Guia de Chamadas e Integração: `gateway_client.js`
+# 📡 Guia de Chamadas via JSON (API REST & RPC Gateway)
 
-Este documento explica **como o fluxo de chamadas funciona**, onde o código deve rodar e traz o **catálogo completo com exemplos práticos de todas as chamadas** disponíveis no cliente `gateway_client.js`.
+Este guia documenta **como fazer chamadas HTTP enviando e recebendo JSON** diretamente no RPC Gateway do WydenCoin (`129.146.55.236:8546`), sem depender de bibliotecas ou SDKs específicos. 
 
----
-
-## 🧭 1. Entendendo o Fluxo: Onde roda cada componente?
-
-Quando um aluno acessa o aplicativo no celular ou um administrador usa o painel web, **o celular/navegador NÃO se conecta diretamente à blockchain nem guarda a chave mestra**. 
-
-O fluxo seguro e recomendado funciona assim:
-
-```mermaid
-graph LR
-    subgraph Cliente["Dispositivo do Usuário"]
-        App["Celular / App Mobile / Frontend Web"]
-    end
-
-    subgraph Backend["Seu Servidor Backend (Node.js)"]
-        API["Sua API Express / Rotas do Sistema"]
-        SDK["gateway_client.js (SDK Cliente)"]
-    end
-
-    subgraph Nuvem["Oracle Cloud - VM 4 (129.146.55.236)"]
-        GW["Gateway API RPC (Porta 8546)<br/>Autenticação X-API-KEY"]
-        Besu["Nó Besu RPC (Porta 8545)"]
-    end
-
-    subgraph Rede["Cluster Multi-Node"]
-        QBFT["Validadores QBFT (VM 1, VM 2, VM 3)"]
-    end
-
-    App -->|"1. Requisicao HTTP (/api/meu-saldo)"| API
-    API -->|"2. client.getSaldo(carteira)"| SDK
-    SDK -->|"3. HTTP POST/GET + X-API-KEY"| GW
-    GW -->|"4. JSON-RPC (127.0.0.1:8545)"| Besu
-    Besu -->|"5. Consenso On-Chain"| QBFT
-    QBFT -->|"6. Confirmação do Bloco"| Besu
-    Besu -->|"7. Resposta do Bloco"| GW
-    GW -->|"8. JSON Tratado"| SDK
-    SDK -->|"9. Objeto JavaScript"| API
-    API -->|"10. Resposta Final JSON"| App
-```
-
-### Por que esse desenho é seguro e prático?
-1. **Segurança do Token:** O token `X-API-KEY` dá permissão para cunhar moedas (`mint`) e gerenciar resgates. Se ficasse salvo dentro do aplicativo do celular, qualquer usuário malicioso poderia extrair o token do APK e gerar moedas infinitas. Ficando no seu Backend, a segurança é total.
-2. **Zero Complexidade de Web3 no App:** O aplicativo móvel ou frontend não precisa carregar bibliotecas pesadas de blockchain (`ethers`, `web3.js`), nem converter unidades decimais (*Wei*), nem assinar transações de gas.
-3. **Simplicidade Absoluta:** O seu backend apenas chama uma função como `client.getSaldo("0x...")` e recebe `{ saldo: 60, unidade: "WC" }`.
+Qualquer linguagem ou ferramenta (cURL, Postman, Insomnia, Python `requests`, Flutter/Dart, PHP, Java ou JavaScript nativo) pode consumir estes endpoints.
 
 ---
 
-## 🚀 2. Como Rodar o Cliente Localmente para Testar
+## 🌐 1. Configurações Globais de Rede e Headers
 
-O arquivo `gateway_client.js` possui um teste completo embutido que você pode rodar do terminal da sua máquina agora mesmo:
-
-```bash
-cd /home/mikael/Documentos/Codes/facicoin/contratos
-node gateway_client.js
-```
-
-Ao executar esse comando, o script na sua máquina:
-1. Faz a conexão segura via internet até a VM 4 da Oracle Cloud (`129.146.55.236:8546`).
-2. Verifica o status da blockchain e o número do bloco atual.
-3. Consulta o saldo da carteira de teste.
-4. Emite 10 WydenCoins on-chain para o aluno.
-5. Confirma o novo saldo atualizado.
+* **URL Base do Gateway:**
+  * Direta (Nuvem / 4G / Servidor): `http://129.146.55.236:8546`
+  * Local (caso esteja em rede com firewall/FortiGuard via túnel SSH): `http://localhost:8546`
+* **Headers HTTP Obrigatórios:**
+  ```http
+  Content-Type: application/json
+  X-API-KEY: wyden-rpc-sec-9a8f27b4e1
+  ```
+  *(Também é aceito no formato `Authorization: Bearer wyden-rpc-sec-9a8f27b4e1`)*
 
 ---
 
-## 📦 3. Como Importar o Cliente no seu Projeto Backend
+## 📋 2. Tabela Rápida de Endpoints
 
-No projeto da sua API Backend (Express, Fastify, Nest.js, etc.):
-
-1. Copie o arquivo [`gateway_client.js`](gateway_client.js) para uma pasta de serviços (ex: `src/services/gateway_client.js`).
-2. Adicione as variáveis de ambiente no seu arquivo `.env` (opcional, já há valores padrão funcionais):
-
-```env
-BLOCKCHAIN_GATEWAY_URL=http://129.146.55.236:8546
-BLOCKCHAIN_GATEWAY_TOKEN=wyden-rpc-sec-9a8f27b4e1
-```
-
-3. No seu controller ou serviço Node.js, importe e instancie a classe:
-
-```javascript
-// Importacao CommonJS
-const { WydencoinGatewayClient } = require('./services/gateway_client');
-
-// Cria a instancia do cliente
-const blockchain = new WydencoinGatewayClient();
-```
+| Método | Endpoint | Autenticação | Descrição |
+| :--- | :--- | :---: | :--- |
+| `GET` | `/health` | Pública | Status da API, bloco atual e contratos |
+| `GET` | `/api/v1/saldo/:aluno` | `X-API-KEY` | Consulta de saldo de WydenCoins (WC) |
+| `POST` | `/api/v1/recompensas/mint` | `X-API-KEY` | Emissão de moedas para 1 aluno |
+| `POST` | `/api/v1/recompensas/mint-batch` | `X-API-KEY` | Emissão de moedas em lote quinzenal |
+| `POST` | `/api/v1/resgates` | `X-API-KEY` | Criação de resgate / voucher |
+| `GET` | `/api/v1/resgates/:id` | `X-API-KEY` | Consulta detalhes e status do resgate |
+| `POST` | `/api/v1/resgates/:id/confirmar` | `X-API-KEY` | Confirmação e queima on-chain na cantina |
+| `POST` | `/api/v1/resgates/:id/cancelar` | `X-API-KEY` | Cancelamento e devolução de moedas |
+| `POST` | `/api/v1/resgates/:id/expirar` | `X-API-KEY` | Expiração de voucher vencido |
+| `POST` | `/api/v1/rpc` | `X-API-KEY` | Proxy JSON-RPC nativo para o nó Besu |
 
 ---
 
-## 📚 4. Catálogo Completo de Chamadas
-
-Abaixo estão todas as funções disponíveis no `gateway_client.js`, seus parâmetros, retornos e exemplos de como utilizá-las dentro de rotas Express.
+## 🛠️ 3. Especificação Detalhada das Chamadas via JSON
 
 ---
 
-### 1️⃣ Verificar Saúde da Blockchain (`getHealth`)
+### 3.1. `GET /health` (Verificação de Status)
 
-Verifica se o nó Besu da nuvem está sincronizado, o número do bloco atual e os endereços dos contratos ativos.
+Consulta pública para saber se a API Gateway e o nó Besu estão online.
 
-* **Parâmetros:** Nenhum.
-* **Autenticação:** Rota pública (não consome token).
+* **Método:** `GET`
+* **URL:** `http://129.146.55.236:8546/health`
+* **Body:** Nenhum.
 
-```javascript
-// Exemplo de chamada:
-const saude = await blockchain.getHealth();
-
-console.log(saude);
-```
-
-**Exemplo de Resposta:**
+#### Exemplo de Resposta JSON (`200 OK`):
 ```json
 {
   "status": "UP",
   "network": {
-    "chainId": 1337,
-    "blockNumber": 92600,
+    "chainId": 381660001,
+    "blockNumber": 165620,
     "peers": 2,
     "syncing": false
   },
@@ -125,149 +63,180 @@ console.log(saude);
     "wydenCoin": "0xa50a51c09a5c451C52BB714527E1974b686D8e77",
     "redemptionManager": "0x9a3DBCa554e9f6b9257aAa24010DA8377C57c17e"
   },
-  "timestamp": "2026-11-17T14:00:00.000Z"
+  "timestamp": "2026-11-17T17:50:00.000Z"
 }
+```
+
+#### Exemplo cURL:
+```bash
+curl -X GET http://129.146.55.236:8546/health
 ```
 
 ---
 
-### 2️⃣ Consultar Saldo de um Aluno (`getSaldo`)
+### 3.2. `GET /api/v1/saldo/:aluno` (Consultar Saldo)
 
-Consulta quantas WydenCoins o aluno possui na carteira. É uma leitura imediata sem custo de gas.
+Retorna o saldo de WydenCoins de uma carteira informada na URL.
 
-* **Parâmetros:**
-  * `alunoAddress` *(string, obrigatório)*: Endereço público hexadecimal da carteira (ex: `0xFE3B55...`).
+* **Método:** `GET`
+* **URL:** `http://129.146.55.236:8546/api/v1/saldo/0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73`
+* **Headers:**
+  * `X-API-KEY: wyden-rpc-sec-9a8f27b4e1`
+* **Body:** Nenhum.
 
-```javascript
-// Exemplo em uma rota Express:
-app.get('/api/alunos/:endereco/saldo', async (req, res) => {
-  try {
-    const resultado = await blockchain.getSaldo(req.params.endereco);
-    return res.json({
-      carteira: resultado.aluno,
-      saldo: resultado.saldo,
-      moeda: resultado.unidade // "WC"
-    });
-  } catch (erro) {
-    return res.status(500).json({ erro: erro.message });
-  }
-});
-```
-
-**Exemplo de Resposta:**
+#### Exemplo de Resposta JSON (`200 OK`):
 ```json
 {
   "success": true,
   "aluno": "0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73",
-  "saldo": 60,
+  "saldo": 70,
   "unidade": "WC"
 }
 ```
 
----
-
-### 3️⃣ Emitir Recompensa Individual (`emitirRecompensa`)
-
-Emite moedas (mint) para um aluno quando ele cumpre uma atividade acadêmica ou mérito.
-
-* **Parâmetros:**
-  * `alunoAddress` *(string, obrigatório)*: Carteira do aluno que vai receber.
-  * `valor` *(number, obrigatório)*: Quantidade inteira de WydenCoins a creditar.
-  * `motivo` *(string, opcional)*: Código da regra pedagógica (ver tabela de motivos na Seção 5).
-
-```javascript
-// Exemplo: Bonificar aluno que fez o Simulado (30 WC)
-app.post('/api/recompensas/simulado', async (req, res) => {
-  try {
-    const { carteiraAluno } = req.body;
-    
-    const transacao = await blockchain.emitirRecompensa(
-      carteiraAluno, 
-      30, 
-      "SIMULADO"
-    );
-
-    return res.json({
-      mensagem: "Recompensa creditada com sucesso na blockchain!",
-      txHash: transacao.txHash,
-      bloco: transacao.blockNumber
-    });
-  } catch (erro) {
-    return res.status(500).json({ erro: erro.message });
-  }
-});
+#### Exemplo cURL:
+```bash
+curl -X GET http://129.146.55.236:8546/api/v1/saldo/0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73 \
+  -H "X-API-KEY: wyden-rpc-sec-9a8f27b4e1"
 ```
 
-**Exemplo de Resposta:**
+---
+
+### 3.3. `POST /api/v1/recompensas/mint` (Emissão Individual)
+
+Emite novas unidades de WydenCoin para a carteira de um aluno por motivo meritório.
+
+* **Método:** `POST`
+* **URL:** `http://129.146.55.236:8546/api/v1/recompensas/mint`
+* **Headers:**
+  * `Content-Type: application/json`
+  * `X-API-KEY: wyden-rpc-sec-9a8f27b4e1`
+
+#### JSON da Requisição (Request Payload):
 ```json
 {
-  "success": true,
-  "txHash": "0x78a4b6c...91b2",
-  "blockNumber": 92605,
   "aluno": "0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73",
-  "valor": 30,
-  "motivo": "SIMULADO"
+  "valor": 10,
+  "motivo": "SIA_15D"
 }
 ```
 
----
+* **Campos:**
+  * `aluno` *(string, obrigatório)*: Endereço hexadecimal da carteira (`0x...`).
+  * `valor` *(number, obrigatório)*: Quantidade inteira de WydenCoins (ex: `10`, `30`).
+  * `motivo` *(string, opcional)*: Código do motivo (Ex: `SIA_15D`, `PRES_15D`, `SIMULADO`, `DIG_ESTUDO`, `VOLTOU`, `CR_SEM`).
 
-### 4️⃣ Emissão em Lote Quinzenal (`emitirLoteRecompensas`)
-
-Processa múltiplas bonificações de uma só vez em uma única transação atômica. Ideal para fechamento quinzenal automatizado de frequência e acessos ao portal.
-
-* **Parâmetros:**
-  * `itens` *(array de objetos, obrigatório)*: Lista com `{ aluno, valor, motivo }`.
-
-```javascript
-// Exemplo: Rotina Cron de fechamento quinzenal
-const premiacoes = [
-  { aluno: "0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73", valor: 10, motivo: "SIA_15D" },
-  { aluno: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8", valor: 10, motivo: "PRES_15D" },
-  { aluno: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC", valor: 30, motivo: "SIMULADO" }
-];
-
-const resultadoLote = await blockchain.emitirLoteRecompensas(premiacoes);
-console.log(`Lote processado! ${resultadoLote.totalItens} premiações incluídas.`);
-console.log(`TxHash da transação única: ${resultadoLote.txHash}`);
+#### Exemplo de Resposta JSON (`200 OK`):
+```json
+{
+  "success": true,
+  "txHash": "0x285263135888b78ee8f6946079850d2f790c58716da5c13fcdc202bb7b27bd93",
+  "blockNumber": 165576,
+  "aluno": "0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73",
+  "valor": 10,
+  "motivo": "SIA_15D"
+}
 ```
 
-**Exemplo de Resposta:**
+#### Exemplo cURL:
+```bash
+curl -X POST http://129.146.55.236:8546/api/v1/recompensas/mint \
+  -H "Content-Type: application/json" \
+  -H "X-API-KEY: wyden-rpc-sec-9a8f27b4e1" \
+  -d '{
+    "aluno": "0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73",
+    "valor": 10,
+    "motivo": "SIA_15D"
+  }'
+```
+
+---
+
+### 3.4. `POST /api/v1/recompensas/mint-batch` (Emissão em Lote)
+
+Emite moedas para múltiplos alunos em uma **única transação atômica**. Ideal para rotinas de fechamento quinzenal.
+
+* **Método:** `POST`
+* **URL:** `http://129.146.55.236:8546/api/v1/recompensas/mint-batch`
+* **Headers:**
+  * `Content-Type: application/json`
+  * `X-API-KEY: wyden-rpc-sec-9a8f27b4e1`
+
+#### JSON da Requisição (Request Payload):
+```json
+{
+  "itens": [
+    {
+      "aluno": "0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73",
+      "valor": 10,
+      "motivo": "SIA_15D"
+    },
+    {
+      "aluno": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+      "valor": 10,
+      "motivo": "PRES_15D"
+    },
+    {
+      "aluno": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+      "valor": 30,
+      "motivo": "SIMULADO"
+    }
+  ]
+}
+```
+
+#### Exemplo de Resposta JSON (`200 OK`):
 ```json
 {
   "success": true,
   "totalItens": 3,
-  "txHash": "0x12c4e5...89aa",
-  "blockNumber": 92610
+  "txHash": "0x3c21a4f00b991ef2340bfa15f79a9cd89031ef091a13c983c21f98bc1901ab21",
+  "blockNumber": 165580
 }
+```
+
+#### Exemplo cURL:
+```bash
+curl -X POST http://129.146.55.236:8546/api/v1/recompensas/mint-batch \
+  -H "Content-Type: application/json" \
+  -H "X-API-KEY: wyden-rpc-sec-9a8f27b4e1" \
+  -d '{
+    "itens": [
+      { "aluno": "0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73", "valor": 10, "motivo": "SIA_15D" },
+      { "aluno": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8", "valor": 10, "motivo": "PRES_15D" }
+    ]
+  }'
 ```
 
 ---
 
-### 5️⃣ Solicitar Resgate de Benefício (`solicitarResgate`)
+### 3.5. `POST /api/v1/resgates` (Criar Resgate / Voucher)
 
-Inicia o ciclo de compra de um voucher na cantina ou agendamento de mentoria. Os tokens do aluno são transferidos para custódia temporária do contrato `RedemptionManager`.
+Transfere as moedas do aluno para a custódia do contrato `RedemptionManager` gerando um voucher.
 
-* **Parâmetros:**
-  * `alunoPrivateKey` *(string, obrigatório)*: Chave privada da carteira do aluno (para autorizar a retenção das moedas).
-  * `beneficioId` *(number, obrigatório)*: ID numérico do benefício no banco de dados.
-  * `valor` *(number, obrigatório)*: Custo do item em WydenCoins.
-  * `horasValidade` *(number, opcional, padrão: 24)*: Prazo para expiração do voucher em horas.
+* **Método:** `POST`
+* **URL:** `http://129.146.55.236:8546/api/v1/resgates`
+* **Headers:**
+  * `Content-Type: application/json`
+  * `X-API-KEY: wyden-rpc-sec-9a8f27b4e1`
 
-```javascript
-// Exemplo: Aluno resgata um "Café com Pão de Queijo" (15 WC)
-const resgate = await blockchain.solicitarResgate(
-  alunoPrivateKey, // Chave privada segura do aluno
-  101,             // ID do produto no banco (ex: Cafe Cantina)
-  15,              // 15 WC
-  48               // Validade de 48 horas
-);
-
-console.log(`Resgate criado com ID #${resgate.idResgate}`);
-console.log(`Expira no timestamp Unix: ${resgate.expiraEm}`);
+#### JSON da Requisição (Request Payload):
+```json
+{
+  "alunoPrivateKey": "0x8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63",
+  "beneficioId": 101,
+  "valor": 15,
+  "horasValidade": 24
+}
 ```
 
-**Exemplo de Resposta:**
+* **Campos:**
+  * `alunoPrivateKey` *(string, obrigatório)*: Chave privada da carteira do aluno para autorizar a transferência para custódia.
+  * `beneficioId` *(number, obrigatório)*: ID do produto no banco de dados da aplicação.
+  * `valor` *(number, obrigatório)*: Custo do item em WydenCoins.
+  * `horasValidade` *(number, opcional, padrão: 24)*: Prazo de expiração do voucher em horas.
+
+#### Exemplo de Resposta JSON (`201 Created`):
 ```json
 {
   "success": true,
@@ -275,27 +244,37 @@ console.log(`Expira no timestamp Unix: ${resgate.expiraEm}`);
   "beneficioId": 101,
   "valor": 15,
   "expiraEm": 1763481600,
-  "txHash": "0xabc...def"
+  "txHash": "0x1d4ef289a0bc9882aef9120934bd081cde91209384bbfa890123ef89021cd981",
+  "blockNumber": 165585
 }
+```
+
+#### Exemplo cURL:
+```bash
+curl -X POST http://129.146.55.236:8546/api/v1/resgates \
+  -H "Content-Type: application/json" \
+  -H "X-API-KEY: wyden-rpc-sec-9a8f27b4e1" \
+  -d '{
+    "alunoPrivateKey": "0x8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63",
+    "beneficioId": 101,
+    "valor": 15,
+    "horasValidade": 24
+  }'
 ```
 
 ---
 
-### 6️⃣ Consultar Detalhes de um Resgate (`consultarResgate`)
+### 3.6. `GET /api/v1/resgates/:id` (Consultar Voucher)
 
-Consulta o status on-chain de um voucher emitido.
+Obtém os dados e o status on-chain de um voucher emitido.
 
-* **Parâmetros:**
-  * `id` *(number, obrigatório)*: ID do resgate gerado on-chain.
+* **Método:** `GET`
+* **URL:** `http://129.146.55.236:8546/api/v1/resgates/1`
+* **Headers:**
+  * `X-API-KEY: wyden-rpc-sec-9a8f27b4e1`
+* **Body:** Nenhum.
 
-```javascript
-const voucher = await blockchain.consultarResgate(1);
-
-console.log("Status:", voucher.status); 
-// Retorna: "Resgatado" (pendente), "Utilizado", "Cancelado" ou "Expirado"
-```
-
-**Exemplo de Resposta:**
+#### Exemplo de Resposta JSON (`200 OK`):
 ```json
 {
   "success": true,
@@ -309,149 +288,243 @@ console.log("Status:", voucher.status);
 }
 ```
 
----
+* **Significado de `status` e `statusCode`:**
+  * `0`: `"Resgatado"` (Pendente / Pronto para uso)
+  * `1`: `"Utilizado"` (Consumido na cantina / Moedas queimadas)
+  * `2`: `"Cancelado"` (Cancelado pelo gestor / Saldo devolvido)
+  * `3`: `"Expirado"` (Prazo ultrapassado / Saldo devolvido)
 
-### 7️⃣ Confirmar Uso do Voucher na Cantina (`confirmarUsoVoucher`)
-
-Chamado quando o operador da cantina ou mentor valida o QR Code do voucher presencialmente. Queima permanentemente as moedas retidas na custódia.
-
-* **Parâmetros:**
-  * `id` *(number, obrigatório)*: ID do resgate.
-
-```javascript
-// Exemplo: Operador da cantina escaneia o QR Code do voucher ID 1
-app.post('/api/cantina/validar-voucher/:id', async (req, res) => {
-  try {
-    const confirmacao = await blockchain.confirmarUsoVoucher(req.params.id);
-    return res.json({
-      sucesso: true,
-      mensagem: "Voucher validado e tokens queimados com sucesso!",
-      txHash: confirmacao.txHash
-    });
-  } catch (erro) {
-    return res.status(400).json({ erro: erro.message });
-  }
-});
+#### Exemplo cURL:
+```bash
+curl -X GET http://129.146.55.236:8546/api/v1/resgates/1 \
+  -H "X-API-KEY: wyden-rpc-sec-9a8f27b4e1"
 ```
 
-**Exemplo de Resposta:**
+---
+
+### 3.7. `POST /api/v1/resgates/:id/confirmar` (Validar / Queimar Voucher)
+
+Chamado quando o operador da cantina valida o QR Code do voucher. Queima definitivamente as moedas custodiadas.
+
+* **Método:** `POST`
+* **URL:** `http://129.146.55.236:8546/api/v1/resgates/1/confirmar`
+* **Headers:**
+  * `X-API-KEY: wyden-rpc-sec-9a8f27b4e1`
+* **Body:** Vazio ou `{}`.
+
+#### Exemplo de Resposta JSON (`200 OK`):
 ```json
 {
   "success": true,
   "id": 1,
   "status": "Utilizado",
-  "txHash": "0xdef...123",
-  "blockNumber": 92615
+  "txHash": "0x98fba100c8a2b34de5912389012cae98120398bbde90123890123abcdfe98012",
+  "blockNumber": 165590
 }
+```
+
+#### Exemplo cURL:
+```bash
+curl -X POST http://129.146.55.236:8546/api/v1/resgates/1/confirmar \
+  -H "X-API-KEY: wyden-rpc-sec-9a8f27b4e1"
 ```
 
 ---
 
-### 8️⃣ Cancelar Voucher e Reembolsar (`cancelarVoucher`)
+### 3.8. `POST /api/v1/resgates/:id/cancelar` (Cancelar e Reembolsar)
 
-Cancela um voucher pendente por solicitação do aluno ou gestor. Devolve integralmente o saldo de moedas para o aluno.
+Cancela um voucher pendente e devolve integralmente as moedas para a carteira do aluno.
 
-* **Parâmetros:**
-  * `id` *(number, obrigatório)*: ID do resgate.
+* **Método:** `POST`
+* **URL:** `http://129.146.55.236:8546/api/v1/resgates/1/cancelar`
+* **Headers:**
+  * `X-API-KEY: wyden-rpc-sec-9a8f27b4e1`
+* **Body:** Vazio ou `{}`.
 
-```javascript
-const cancelamento = await blockchain.cancelarVoucher(1);
-console.log(`Voucher cancelado e saldo devolvido ao aluno.`);
-```
-
-**Exemplo de Resposta:**
+#### Exemplo de Resposta JSON (`200 OK`):
 ```json
 {
   "success": true,
   "id": 1,
   "status": "Cancelado",
-  "txHash": "0x456...789",
-  "blockNumber": 92620
+  "txHash": "0xaa12bc34de56fa780912bcde349012ca981230491823abce891023cd891023bc",
+  "blockNumber": 165595
 }
 ```
 
----
-
-### 9️⃣ Expirar Voucher Vencido (`expirarVoucher`)
-
-Quando o prazo do voucher é ultrapassado sem utilização, essa função processa a devolução automática das moedas para a conta do aluno.
-
-* **Parâmetros:**
-  * `id` *(number, obrigatório)*: ID do resgate vencido.
-
-```javascript
-const expirado = await blockchain.expirarVoucher(1);
-console.log(`Voucher expirado e moedas devolvidas.`);
+#### Exemplo cURL:
+```bash
+curl -X POST http://129.146.55.236:8546/api/v1/resgates/1/cancelar \
+  -H "X-API-KEY: wyden-rpc-sec-9a8f27b4e1"
 ```
 
 ---
 
-### 🔟 Chamada RPC Bruta Avançada (`chamadaRpcBruta`)
+### 3.9. `POST /api/v1/resgates/:id/expirar` (Expirar Voucher)
 
-Permite executar qualquer chamada padrão da API Ethereum JSON-RPC diretamente através da conexão segura do gateway, sem expor o Besu diretamente.
+Executa a devolução das moedas ao aluno quando a validade (`expiraEm`) foi ultrapassada.
 
-* **Parâmetros:**
-  * `method` *(string, obrigatório)*: Nome do método RPC (ex: `eth_blockNumber`, `eth_getTransactionReceipt`).
-  * `params` *(array, opcional)*: Parâmetros da chamada RPC.
+* **Método:** `POST`
+* **URL:** `http://129.146.55.236:8546/api/v1/resgates/1/expirar`
+* **Headers:**
+  * `X-API-KEY: wyden-rpc-sec-9a8f27b4e1`
+* **Body:** Vazio ou `{}`.
 
-```javascript
-// Exemplo: Obter o número do bloco mais recente em hexadecimal
-const rpc = await blockchain.chamadaRpcBruta("eth_blockNumber", []);
-console.log("Bloco em decimal:", parseInt(rpc.result, 16));
-```
-
----
-
-## 🏷️ 5. Tabela de Motivos Padrão (WydenCoin)
-
-Use estas strings padronizadas no parâmetro `motivo` da emissão de moedas:
-
-| Código Motivo | Valor Típico | Descrição Regra de Negócio |
-| :--- | :---: | :--- |
-| `SIA_15D` | 10 WC | Aluno acessou o portal acadêmico (SIA) ao menos 1 vez na quinzena |
-| `PRES_15D` | 10 WC | Aluno manteve frequência regular (>=75%) no período quinzenal |
-| `SIMULADO` | 30 WC | Participação e entrega do simulado semestral |
-| `DIG_ESTUDO`| 10 WC | Conclusão de módulo ou trilha de estudo digital |
-| `VOLTOU` | 20 WC | Reengajamento / Rematrícula confirmada |
-| `CR_SEM` | 40 WC | Aluno de destaque por Coeficiente de Rendimento no semestre |
-
----
-
-## 🛡️ 6. Tratamento de Erros e Boas Práticas
-
-Todas as funções do `gateway_client.js` lançam erros padrão do JavaScript caso ocorra algum problema (falha de rede, chave de API inválida, saldo insuficiente ou parâmetros ausentes).
-
-Sempre envolva as chamadas em blocos `try/catch`:
-
-```javascript
-try {
-  const resultado = await blockchain.emitirRecompensa(carteira, 10, "PRES_15D");
-  console.log("Sucesso:", resultado.txHash);
-} catch (erro) {
-  // erro.message contem a explicacao detalhada devolvida pelo Gateway
-  console.error("Falha ao comunicar com a Blockchain:", erro.message);
+#### Exemplo de Resposta JSON (`200 OK`):
+```json
+{
+  "success": true,
+  "id": 1,
+  "status": "Expirado",
+  "txHash": "0xbb9876543210fedcba0987654321fedcba0987654321fedcba0987654321fedc",
+  "blockNumber": 165600
 }
 ```
 
-### Principais códigos de erro e soluções:
-* **`Token de autenticação ausente ou inválido`**: Verifique se o `API_KEY` (`wyden-rpc-sec-9a8f27b4e1`) está configurado no cabeçalho `X-API-KEY`.
-* **`Saldo insuficiente para realizar resgate`**: O aluno tentou resgatar um item com valor superior ao seu saldo de WC.
-* **`Voucher expirado ou já utilizado`**: Tentativa de confirmar ou cancelar um voucher fora do estado pendente.
-* **`Erro HTTP 403: Forbidden (FortiGuard / Firewall de Rede)`**: Se você estiver conectado na rede Wi-Fi corporativa ou da faculdade, o firewall (Fortinet/FortiGuard) pode bloquear requisições HTTP para IPs públicos não catalogados. 
-  * *Solução rápida no desenvolvimento local:* Crie um túnel SSH seguro executando no terminal:
-    ```bash
-    ssh -f -N -L 8546:127.0.0.1:8546 ubuntu@129.146.55.236
-    ```
-    E aponte a URL no `.env` para:
-    ```env
-    BLOCKCHAIN_GATEWAY_URL=http://localhost:8546
-    ```
-  * *Em produção:* Servidores em nuvem (Render, AWS, Heroku, Supabase Edge Functions) ou redes 4G/5G não sofrem esse bloqueio e acessam `http://129.146.55.236:8546` diretamente.
+#### Exemplo cURL:
+```bash
+curl -X POST http://129.146.55.236:8546/api/v1/resgates/1/expirar \
+  -H "X-API-KEY: wyden-rpc-sec-9a8f27b4e1"
+```
 
 ---
 
-## 🏁 Resumo
+### 3.10. `POST /api/v1/rpc` (Proxy JSON-RPC Nativo Ethereum)
 
-* **No Celular/Frontend:** Apenas faça chamadas HTTP normais para o seu backend (ex: `GET /api/meu-saldo`).
-* **No seu Backend:** Use o `gateway_client.js` para consultar e transacionar na blockchain.
-* **Na VM 4 Cloud:** O Gateway gerencia a autenticação, segurança, taxas de gas e fala diretamente com os nós Besu.
+Permite executar qualquer chamada padrão JSON-RPC contra o nó Hyperledger Besu sem expor portas diretas da blockchain.
+
+* **Método:** `POST`
+* **URL:** `http://129.146.55.236:8546/api/v1/rpc`
+* **Headers:**
+  * `Content-Type: application/json`
+  * `X-API-KEY: wyden-rpc-sec-9a8f27b4e1`
+
+#### JSON da Requisição (Request Payload):
+```json
+{
+  "method": "eth_blockNumber",
+  "params": []
+}
+```
+
+#### Exemplo de Resposta JSON (`200 OK`):
+```json
+{
+  "success": true,
+  "result": "0x286c9"
+}
+```
+*(Para converter o bloco `0x286c9` em decimal: `parseInt("0x286c9", 16) = 165577`)*
+
+#### Exemplo cURL:
+```bash
+curl -X POST http://129.146.55.236:8546/api/v1/rpc \
+  -H "Content-Type: application/json" \
+  -H "X-API-KEY: wyden-rpc-sec-9a8f27b4e1" \
+  -d '{
+    "method": "eth_blockNumber",
+    "params": []
+  }'
+```
+
+---
+
+## 🔮 4. Chamadas JSON-RPC Úteis via `POST /api/v1/rpc`
+
+Você pode enviar qualquer método padrão da especificação Ethereum JSON-RPC:
+
+| Objetivo | Payload JSON a enviar |
+| :--- | :--- |
+| **Bloco Atual** | `{"method": "eth_blockNumber", "params": []}` |
+| **Recibo de Transação** | `{"method": "eth_getTransactionReceipt", "params": ["0xTxHash..."]}` |
+| **Detalhes do Bloco** | `{"method": "eth_getBlockByNumber", "params": ["latest", false]}` |
+| **Quantidade de Peers** | `{"method": "net_peerCount", "params": []}` |
+| **Chain ID da Rede** | `{"method": "eth_chainId", "params": []}` |
+
+---
+
+## ⚠️ 5. Padrão de Erros HTTP e Estrutura JSON de Resposta
+
+Caso ocorra qualquer erro de parâmetro, chave de API inválida ou erro on-chain, o Gateway responde com formato JSON padronizado:
+
+```json
+{
+  "success": false,
+  "error": "Descrição detalhada do motivo do erro"
+}
+```
+
+### Códigos de Status HTTP Retornados:
+
+| Status HTTP | Causa | Exemplo de JSON de Erro |
+| :---: | :--- | :--- |
+| **`400 Bad Request`** | Parâmetro inválido ou ausente | `{"success": false, "error": "Endereco de aluno invalido: 0x123"}` |
+| **`401 Unauthorized`** | Token `X-API-KEY` ausente ou incorreto | `{"success": false, "error": "Acesso nao autorizado. Header X-API-KEY ou Bearer token invalido."}` |
+| **`404 Not Found`** | Rota ou ID inexistente | `{"success": false, "error": "Rota nao encontrada: POST /api/v1/rota-errada"}` |
+| **`500 Internal Error`**| Reversão de contrato ou falha no Besu | `{"success": false, "error": "execution reverted: Saldo insuficiente"}` |
+
+---
+
+## 💻 6. Exemplos de Envio de JSON em Diferentes Linguagens
+
+### Exemplo 1: JavaScript Nativo (`fetch`)
+```javascript
+const resposta = await fetch("http://129.146.55.236:8546/api/v1/recompensas/mint", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "X-API-KEY": "wyden-rpc-sec-9a8f27b4e1"
+  },
+  body: JSON.stringify({
+    aluno: "0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73",
+    valor: 10,
+    motivo: "SIA_15D"
+  })
+});
+
+const dados = await resposta.json();
+console.log("TxHash retornado:", dados.txHash);
+```
+
+### Exemplo 2: Python (`requests`)
+```python
+import requests
+
+url = "http://129.146.55.236:8546/api/v1/recompensas/mint"
+headers = {
+    "Content-Type": "application/json",
+    "X-API-KEY": "wyden-rpc-sec-9a8f27b4e1"
+}
+payload = {
+    "aluno": "0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73",
+    "valor": 10,
+    "motivo": "SIA_15D"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+### Exemplo 3: Dart / Flutter (`http`)
+```dart
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+Future<void> emitirMoeda() async {
+  final url = Uri.parse('http://129.146.55.236:8546/api/v1/recompensas/mint');
+  final response = await http.post(
+    url,
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-KEY': 'wyden-rpc-sec-9a8f27b4e1',
+    },
+    body: jsonEncode({
+      'aluno': '0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73',
+      'valor': 10,
+      'motivo': 'SIA_15D',
+    }),
+  );
+
+  print(jsonDecode(response.body));
+}
+```
