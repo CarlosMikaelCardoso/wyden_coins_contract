@@ -107,7 +107,7 @@ Esses eventos são fundamentais para o indexador manter o banco de dados sincron
 
 Para a API Node.js/Express (desenvolvida por Luiz Felipe e Henrique) se comunicar com a blockchain de forma segura e sem complexidade de Web3, utilize o cliente oficial do Gateway:
 
-👉 **Consulte o guia completo com exemplos práticos: [`GUIA_INTEGRACAO_BACKEND.md`](GUIA_INTEGRACAO_BACKEND.md)**  
+👉 **Consulte o guia completo com exemplos práticos: [`GUIA_CHAMADAS_GATEWAY_CLIENT.md`](GUIA_CHAMADAS_GATEWAY_CLIENT.md)**  
 👉 **Arquivo do cliente pronto para copiar: [`gateway_client.js`](gateway_client.js)**
 
 ### Como Inicializar no Backend:
