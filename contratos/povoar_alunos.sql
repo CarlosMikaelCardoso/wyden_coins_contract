@@ -1,0 +1,87 @@
+-- ==============================================================================
+-- Script de Povoamento Inicial: Alunos & Carteiras Blockchain (WydenCoin)
+-- Total de registros: 66 alunos
+-- Gerado em: 2026-11-17T19:07:08.825Z
+-- ==============================================================================
+
+-- 1. Garante que a tabela alunos exista com o campo de carteira
+CREATE TABLE IF NOT EXISTS alunos (
+    id SERIAL PRIMARY KEY,
+    matricula VARCHAR(20) UNIQUE NOT NULL,
+    modalidade VARCHAR(20) NOT NULL DEFAULT 'PRESENCIAL',
+    curso VARCHAR(100) NOT NULL DEFAULT 'Sistemas de Informação',
+    carteira_address VARCHAR(42) UNIQUE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 2. Inserção idempotente (ON CONFLICT preserva dados se já existirem)
+INSERT INTO alunos (matricula, modalidade, curso, carteira_address) VALUES
+  ('202108227161', 'DIGITAL', 'Sistemas de Informação', '0x2c3bDed62000Fc192ff4B4A4918B040BB8F157A4'),
+  ('202108636134', 'PRESENCIAL', 'Sistemas de Informação', '0xC336d2ab6e4022C22384740E87CC59654dB30b98'),
+  ('202203673891', 'PRESENCIAL', 'Sistemas de Informação', '0x402a8BAfd279Cf68d9dc5D4F0616D1DB8B25c9ae'),
+  ('202203891944', 'PRESENCIAL', 'Sistemas de Informação', '0x8c1B591d3E0c89F6c5d2cd031fa0Df2bD4fc9c7d'),
+  ('202209062095', 'PRESENCIAL', 'Sistemas de Informação', '0x26e18Ab1442579C3b777cd59cc2d0296e9dC7C5f'),
+  ('202302415652', 'PRESENCIAL', 'Sistemas de Informação', '0x115AA12E3875E9F6B1FB39dbAF65Cf763b22fb05'),
+  ('202302695401', 'PRESENCIAL', 'Sistemas de Informação', '0xBA397fBA6C3F0Ab80BD2f48b6B1ab7169266bEe4'),
+  ('202303021631', 'PRESENCIAL', 'Sistemas de Informação', '0xBd0a98f7B856dD939259B6b66B805a3e2e6D326A'),
+  ('202304057079', 'PRESENCIAL', 'Sistemas de Informação', '0xc87965A4cd5931a13C389AD853B6E3F2411d1eE7'),
+  ('202304057109', 'PRESENCIAL', 'Sistemas de Informação', '0x745d6E4A7875788F5606107F505FB4d8bC56D442'),
+  ('202304237123', 'PRESENCIAL', 'Sistemas de Informação', '0x6ED84D264B04ae7a834e6b92510C9F704Dc69e88'),
+  ('202304468516', 'PRESENCIAL', 'Sistemas de Informação', '0x146958B7bd206075437c08aa297AE956C48e54C2'),
+  ('202304472998', 'PRESENCIAL', 'Sistemas de Informação', '0xA11A77e5d307AE4E16c11224afb2AcC3aC80768a'),
+  ('202307040398', 'DIGITAL', 'Sistemas de Informação', '0x7663250C16c60ACa5E9d2346ec954911431330bc'),
+  ('202308612298', 'DIGITAL', 'Sistemas de Informação', '0x6F3A20C79714eDCb35792BC788b69705B390f60c'),
+  ('202308668684', 'PRESENCIAL', 'Sistemas de Informação', '0xBe7307bE68099d769085F614dd4363ff7a788969'),
+  ('202401239275', 'DIGITAL', 'Sistemas de Informação', '0xE8A7762c2114ADBa451d698B326C2886beB0b110'),
+  ('202401607738', 'DIGITAL', 'Sistemas de Informação', '0xB75E05F349a103736B040C1e9B67A19fad40F010'),
+  ('202402390091', 'PRESENCIAL', 'Sistemas de Informação', '0xdA2f9f1C766c29D2b2D5ad5983f8422D20EEF4bA'),
+  ('202403092328', 'PRESENCIAL', 'Sistemas de Informação', '0xb7F8275588Fe45eD3A47141c678AAbd34d2F3e34'),
+  ('202403475031', 'PRESENCIAL', 'Sistemas de Informação', '0x719Cd045E095c7252E80aA616f5D5d1AFF1D4Ff0'),
+  ('202403486377', 'PRESENCIAL', 'Sistemas de Informação', '0x5787D0dD6a12F222727dAe428ec8decA2fD33cda'),
+  ('202403694115', 'PRESENCIAL', 'Sistemas de Informação', '0x7beFce6FD4ae71C754C7159B0213f7dA4ff9a084'),
+  ('202403971275', 'PRESENCIAL', 'Sistemas de Informação', '0x7104cd268fe945f5A829a87BD095f3b24eE31708'),
+  ('202404152243', 'PRESENCIAL', 'Sistemas de Informação', '0x1ce5E446024b160338533b1442f235586C458532'),
+  ('202404152707', 'PRESENCIAL', 'Sistemas de Informação', '0xc065779190464554d49EB33f5E44039B55F071BC'),
+  ('202404170314', 'PRESENCIAL', 'Sistemas de Informação', '0x7Af6d7280ce733819e4741a06E437FD4bD1E2833'),
+  ('202404170527', 'PRESENCIAL', 'Sistemas de Informação', '0x319E900390D3624CA83F34E799ab73d39B94Cf19'),
+  ('202404216161', 'PRESENCIAL', 'Sistemas de Informação', '0x65f79B208e9c95b3DfAC07c24daba59BE24Ffb25'),
+  ('202404369791', 'PRESENCIAL', 'Sistemas de Informação', '0x063478dF2CE4d023890D90C6695E317670A08833'),
+  ('202404493237', 'PRESENCIAL', 'Sistemas de Informação', '0x60c128121EDF1a08666fdbca17FBC933f16fDf22'),
+  ('202409114951', 'DIGITAL', 'Sistemas de Informação', '0xe182d78feF80c786ACae285E0af1514eefc3A67C'),
+  ('202409154503', 'PRESENCIAL', 'Sistemas de Informação', '0x00905E2dfA269bD7cAa343A29Ed976b0262865D0'),
+  ('202409264988', 'PRESENCIAL', 'Sistemas de Informação', '0x11Ac21A73d25d0873Cf51d2B4985a9BC6321bD21'),
+  ('202501586198', 'DIGITAL', 'Sistemas de Informação', '0xB0Ac681c66dB64B5EfC3ab6D004ac7D69643b6b2'),
+  ('202502276729', 'PRESENCIAL', 'Sistemas de Informação', '0x690882E5049B5a7C902bE4c004bF516621F7658c'),
+  ('202502323281', 'PRESENCIAL', 'Sistemas de Informação', '0xF97F9de194DFbEfBc45511a4404d22B7DcF2AF7E'),
+  ('202502519346', 'PRESENCIAL', 'Sistemas de Informação', '0x4A4C3dC9690B07ec57E655C8d6f4f5D98015EB02'),
+  ('202503229961', 'PRESENCIAL', 'Sistemas de Informação', '0xA704769aB6938D9b5c28eDC0FA006653c8df3aAD'),
+  ('202503365504', 'PRESENCIAL', 'Sistemas de Informação', '0xd3e1C1AeBaE39Ad45698640F1ff0846014dE94A7'),
+  ('202503365611', 'PRESENCIAL', 'Sistemas de Informação', '0x823BD3Ef77Cb1c750adEaA3EE18B6D0A2F932Da1'),
+  ('202503365644', 'PRESENCIAL', 'Sistemas de Informação', '0xD467ee01299B0258a1612e9c498D2eD5476fE427'),
+  ('202503365652', 'PRESENCIAL', 'Sistemas de Informação', '0xb9719f2d889b1Aa7CB71B6D12Ab0A9D8f570E2B3'),
+  ('202503754306', 'PRESENCIAL', 'Sistemas de Informação', '0x2f5f7Eac1Ff073332b15bDa5E32a5757F1Ba32Bb'),
+  ('202504040391', 'PRESENCIAL', 'Sistemas de Informação', '0x5B92EA34B3A286bE04Bc540Bad786b0BC06D5C74'),
+  ('202504234284', 'PRESENCIAL', 'Sistemas de Informação', '0xEd7Cb270130b6EA92E73c2e034891a48aF908Ea0'),
+  ('202508384361', 'PRESENCIAL', 'Sistemas de Informação', '0xB8aA12e3f08c07661A693e168fFf2EcE50A55b44'),
+  ('202508600153', 'PRESENCIAL', 'Sistemas de Informação', '0xfFB7C7A7F5b73aF57e7F88722CFfE86Eb92C8Aa1'),
+  ('202603264416', 'DIGITAL', 'Sistemas de Informação', '0x48B37c7FF68c28d603c04CeC2d0E666c4EFD180b'),
+  ('202603268306', 'PRESENCIAL', 'Sistemas de Informação', '0xefe977586409e33A9A9F3aDa5a599D10ddB487ae'),
+  ('202603268314', 'PRESENCIAL', 'Sistemas de Informação', '0xB58Ac37098B0Da2EB57dF7864E2Fc734F8A538B9'),
+  ('202603348211', 'DIGITAL', 'Sistemas de Informação', '0x0E6074168939882A9565e5e1F05Be51eA6668026'),
+  ('202603414841', 'PRESENCIAL', 'Sistemas de Informação', '0xDd23aD7c4075B24dbF019e349155E673c0Cb010A'),
+  ('202603414851', 'PRESENCIAL', 'Sistemas de Informação', '0xcC50b74aE04ef04ff10dcB530A797383e6DDbAeE'),
+  ('202603414868', 'PRESENCIAL', 'Sistemas de Informação', '0xB038ca7171630eAB7E3Ac9299F9Bc03D5cB035dF'),
+  ('202603414876', 'PRESENCIAL', 'Sistemas de Informação', '0x3BD6e1a704c090854883faaF2B66C88d7aE0745B'),
+  ('202603414892', 'PRESENCIAL', 'Sistemas de Informação', '0x8BDbc3Ec5aACA036E99df39186ae5F4B952C252E'),
+  ('202603414906', 'PRESENCIAL', 'Sistemas de Informação', '0x51d8A14c94AB9d5547a6DdF89dfB13927e3384BF'),
+  ('202603414914', 'PRESENCIAL', 'Sistemas de Informação', '0x8329072D87810D4411EF559ffa9c7d343Ddd5641'),
+  ('202603495248', 'PRESENCIAL', 'Sistemas de Informação', '0xd6F168130231978e174C0DD8d005924C208B885b'),
+  ('202603512657', 'PRESENCIAL', 'Sistemas de Informação', '0x5711785a69340a3e826243080EBEA8705ce4E2f5'),
+  ('202603523381', 'PRESENCIAL', 'Sistemas de Informação', '0x5fE4872eD3A89A3565e973d97028e15B8c1B5CDA'),
+  ('202603556379', 'PRESENCIAL', 'Sistemas de Informação', '0x3e5314b1d658e25Bced5Fa4327fb9cC802782F9C'),
+  ('202604475453', 'PRESENCIAL', 'Sistemas de Informação', '0xd8Bca899f0555F8f39beaF19AB0B4B47ABD52604'),
+  ('202605009111', 'PRESENCIAL', 'Sistemas de Informação', '0x72Ef1D0F4e508Df93639045E99Fe7a8DEFe79dC0'),
+  ('202605031141', 'PRESENCIAL', 'Sistemas de Informação', '0xcdA5f85E9Db344C955d78Dfa852040e35E8d8373');
+
+-- Atualiza carteiras caso a matrícula já exista no banco
+-- ON CONFLICT (matricula) DO UPDATE SET carteira_address = EXCLUDED.carteira_address;
