@@ -27,7 +27,7 @@ O próprio arquivo já vem com um teste demonstrativo funcional no rodapé. Voc�
    ```
 
 3. **O que acontece ao rodar:**
-   * Ele conecta via internet na máquina RPC da Oracle Cloud (`http://129.146.55.236:8546`).
+   * Ele conecta via internet na máquina RPC da Oracle Cloud (`http://wydencoin-rpc.duckdns.org:8546`).
    * Valida a saúde da rede Besu.
    * Consulta o saldo atual de um aluno.
    * Emite moedas de bonificação on-chain em tempo real.

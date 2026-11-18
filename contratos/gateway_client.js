@@ -16,7 +16,7 @@
  * ==============================================================================
  */
 
-const GATEWAY_URL = process.env.BLOCKCHAIN_GATEWAY_URL || "http://129.146.55.236:8546";
+const GATEWAY_URL = process.env.BLOCKCHAIN_GATEWAY_URL || "http://wydencoin-rpc.duckdns.org:8546";
 const API_KEY = process.env.BLOCKCHAIN_GATEWAY_TOKEN || "wyden-rpc-sec-9a8f27b4e1";
 
 /**
@@ -24,7 +24,7 @@ const API_KEY = process.env.BLOCKCHAIN_GATEWAY_TOKEN || "wyden-rpc-sec-9a8f27b4e
  */
 class WydencoinGatewayClient {
   /**
-   * @param {string} baseUrl - URL base do gateway (ex: http://129.146.55.236:8546)
+   * @param {string} baseUrl - URL base do gateway (ex: http://wydencoin-rpc.duckdns.org:8546)
    * @param {string} apiKey  - Token secreto de autenticacao do header X-API-KEY
    */
   constructor(baseUrl = GATEWAY_URL, apiKey = API_KEY) {

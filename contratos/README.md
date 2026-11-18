@@ -6,7 +6,7 @@ Esta documentação explica a arquitetura e o funcionamento dos contratos inteli
 
 ## 📍 Endereços na Rede Multi-Node (Oracle Cloud - Besu QBFT)
 
-* **RPC Endpoint:** `http://129.146.55.236:8545`
+* **RPC Endpoint:** `http://wydencoin-rpc.duckdns.org:8545`
 * **Chain ID:** `381660001` (`0x16bfab61`)
 * **Consenso:** QBFT (Blocos a cada 2 segundos, custo de gas zerado)
 
@@ -114,7 +114,7 @@ Para a API Node.js/Express (desenvolvida por Luiz Felipe e Henrique) se comunica
 ```bash
 # 1. Copie o gateway_client.js para seu projeto Express
 # 2. No seu .env, adicione:
-BLOCKCHAIN_GATEWAY_URL=http://129.146.55.236:8546
+BLOCKCHAIN_GATEWAY_URL=http://wydencoin-rpc.duckdns.org:8546
 BLOCKCHAIN_GATEWAY_TOKEN=wyden-rpc-sec-9a8f27b4e1
 ```
 
